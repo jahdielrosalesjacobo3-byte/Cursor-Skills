@@ -1,0 +1,42 @@
+name: Agent Security Scan
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  security-events: write
+  contents: read
+
+jobs:
+  agent-audit:
+    name: AgentAuditKit — MCP & agent config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: sattyamjjain/agent-audit-kit@v0.3.34
+        with:
+          path: .
+          fail-on: high
+          upload-sarif: true
+
+  semgrep:
+    name: Semgrep SAST
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        run: semgrep scan --config auto --sarif --output semgrep.sarif .
+        continue-on-error: true
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep

@@ -1,0 +1,15 @@
+{
+  "_description": "Frontend, scraping, automatización web, replicar páginas. Incluye skill global /clone-website para clonar sitios pixel-perfect.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "agent-browser@agent-browser",
+    "ruflo-browser@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills",
+    "antigravity-bundle-web-wizard@antigravity-awesome-skills"
+  ],
+  "_global_skills": [
+    "clone-website (~/.claude/skills/clone-website/SKILL.md) - clonado pixel-perfect de sitios web"
+  ]
+}

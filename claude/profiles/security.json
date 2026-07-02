@@ -1,0 +1,32 @@
+{
+  "_description": "Pentesting, OSINT, auditoría de seguridad, defensa AI.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "hackingtool@hackingtool-marketplace",
+    "ruflo-security-audit@ruflo",
+    "ruflo-aidefence@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills",
+    "antigravity-bundle-security-engineer@antigravity-awesome-skills"
+  ],
+  "_marketplaces": [
+    "trailofbits/skills"
+  ],
+  "_recommended_trailofbits_plugins": [
+    "static-analysis@trailofbits",
+    "differential-review@trailofbits",
+    "variant-analysis@trailofbits",
+    "supply-chain-risk-auditor@trailofbits",
+    "insecure-defaults@trailofbits",
+    "agentic-actions-auditor@trailofbits",
+    "sharp-edges@trailofbits"
+  ],
+  "_skills_installed_via_setup": [
+    "owasp-security",
+    "security-audit",
+    "cyber-blue-team-defense",
+    "cyber-web-security",
+    "cyber-ai-llm-security"
+  ]
+}

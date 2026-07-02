@@ -1,0 +1,14 @@
+{
+  "_description": "Desarrollo cotidiano. TDD, refactor, git, ADRs, docs.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "ruflo-testgen@ruflo",
+    "ruflo-jujutsu@ruflo",
+    "ruflo-docs@ruflo",
+    "ruflo-adr@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills",
+    "antigravity-bundle-full-stack-developer@antigravity-awesome-skills"
+  ]
+}

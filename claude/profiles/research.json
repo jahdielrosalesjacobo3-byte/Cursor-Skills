@@ -1,0 +1,18 @@
+{
+  "_description": "Investigación profunda, RAG, grafos de conocimiento, búsqueda semántica vectorial.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "ruflo-rag-memory@ruflo",
+    "ruflo-agentdb@ruflo",
+    "ruflo-ruvector@ruflo",
+    "ruflo-knowledge-graph@ruflo",
+    "ruflo-intelligence@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills",
+    "antigravity-bundle-agent-architect@antigravity-awesome-skills"
+  ],
+  "_global_skills": [
+    "obsidian-cli-memory-bank — segundo cerebro en /Users/jahdielrosales/Documents/ObsidianVault"
+  ]
+}

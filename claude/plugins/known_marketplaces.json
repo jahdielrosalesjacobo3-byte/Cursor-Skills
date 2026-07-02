@@ -1,0 +1,50 @@
+{
+  "claude-plugins-official": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
+    },
+    "installLocation": "/Users/jahdielrosales/.claude/plugins/marketplaces/claude-plugins-official",
+    "lastUpdated": "2026-05-07T22:16:23.276Z"
+  },
+  "netresearch-claude-code-marketplace": {
+    "source": {
+      "source": "github",
+      "repo": "netresearch/claude-code-marketplace"
+    },
+    "installLocation": "/Users/jahdielrosales/.claude/plugins/marketplaces/netresearch-claude-code-marketplace",
+    "lastUpdated": "2026-05-11T16:39:26.609Z"
+  },
+  "hackingtool-marketplace": {
+    "source": {
+      "source": "github",
+      "repo": "AKCodez/hackingtool-plugin"
+    },
+    "installLocation": "/Users/jahdielrosales/.claude/plugins/marketplaces/hackingtool-marketplace",
+    "lastUpdated": "2026-05-11T16:53:58.543Z"
+  },
+  "antigravity-awesome-skills": {
+    "source": {
+      "source": "github",
+      "repo": "sickn33/antigravity-awesome-skills"
+    },
+    "installLocation": "/Users/jahdielrosales/.claude/plugins/marketplaces/antigravity-awesome-skills",
+    "lastUpdated": "2026-05-11T17:04:48.837Z"
+  },
+  "agent-browser": {
+    "source": {
+      "source": "github",
+      "repo": "vercel-labs/agent-browser"
+    },
+    "installLocation": "/Users/jahdielrosales/.claude/plugins/marketplaces/agent-browser",
+    "lastUpdated": "2026-05-11T17:21:29.491Z"
+  },
+  "ruflo": {
+    "source": {
+      "source": "github",
+      "repo": "ruvnet/ruflo"
+    },
+    "installLocation": "/Users/jahdielrosales/.claude/plugins/marketplaces/ruflo",
+    "lastUpdated": "2026-05-11T18:33:04.072Z"
+  }
+}

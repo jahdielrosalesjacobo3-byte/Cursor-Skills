@@ -1,0 +1,36 @@
+{
+  "name": "@netresearch/file-search-skill",
+  "version": "0.0.0-source",
+  "private": true,
+  "description": "Netresearch AI skill for efficient code and file search using ripgrep, ast-grep, fd, rga, tokei.",
+  "license": "(MIT AND CC-BY-SA-4.0)",
+  "author": "Netresearch DTT GmbH (https://www.netresearch.de/)",
+  "homepage": "https://github.com/netresearch/file-search-skill",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netresearch/file-search-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/netresearch/file-search-skill/issues"
+  },
+  "keywords": [
+    "ai-agent-skill",
+    "ripgrep",
+    "ast-grep",
+    "code-search",
+    "file-search",
+    "anthropic",
+    "claude-code"
+  ],
+  "aiAgentSkill": "skills/file-search/SKILL.md",
+  "files": [
+    "skills/file-search/",
+    "scripts/",
+    "LICENSE-MIT",
+    "LICENSE-CC-BY-SA-4.0",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "@netresearch/agent-skill-coordinator": "^0.1"
+  }
+}

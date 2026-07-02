@@ -1,0 +1,26 @@
+---
+description: Security guardrails — scan code with Snyk and Semgrep during development
+globs:
+alwaysApply: true
+---
+
+# Security Scanning (Shift-Left)
+
+When generating or modifying application code, dependencies, IaC, or containers:
+
+1. **After writing code** — call `snyk_code_scan` on changed files/directories.
+2. **After adding/updating dependencies** — call `snyk_sca_scan` on manifest files (`package.json`, `requirements.txt`, `pyproject.toml`, etc.).
+3. **For Terraform/K8s/Docker** — call `snyk_iac_scan` or `snyk_container_scan` when relevant.
+4. **Use Semgrep MCP** — run security scans via Semgrep tools before considering the task complete.
+5. **Fix findings** — remediate Critical/High issues in the same session before finishing.
+6. **Never commit secrets** — no API keys, tokens, or credentials in source code.
+
+## Review triggers
+
+- Auth, middleware, RLS, or permission changes → also run `/review-security` or OWASP checklist.
+- New MCP server config (`.cursor/mcp.json`, `mcp.json`) → treat as high-risk; verify command paths and args.
+- Pre-production changes → suggest `/security-audit all` (Claude) or full CI pipeline.
+
+## OWASP priorities
+
+Deny-by-default access control, parameterized queries, TLS 1.2+, Argon2/bcrypt for passwords, server-side validation, structured security logging.

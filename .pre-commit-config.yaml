@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: agent-audit-kit
+        name: AgentAuditKit scan
+        entry: bash -c 'command -v agent-audit-kit >/dev/null || export PATH="$HOME/.local/bin:$PATH"; agent-audit-kit scan . --fail-on high'
+        language: system
+        pass_filenames: false
+        files: ^(\.cursor/|\.claude/|mcp\.json)

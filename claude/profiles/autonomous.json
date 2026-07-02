@@ -1,0 +1,20 @@
+{
+  "_description": "Modo agentico autónomo. Swarm + autopilot + loops + memoria persistente + SPARC.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "ruflo-swarm@ruflo",
+    "ruflo-autopilot@ruflo",
+    "ruflo-loop-workers@ruflo",
+    "ruflo-rag-memory@ruflo",
+    "ruflo-intelligence@ruflo",
+    "ruflo-goals@ruflo",
+    "ruflo-sparc@ruflo",
+    "ruflo-workflows@ruflo",
+    "ruflo-daa@ruflo",
+    "ruflo-testgen@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills",
+    "antigravity-bundle-agent-architect@antigravity-awesome-skills"
+  ]
+}

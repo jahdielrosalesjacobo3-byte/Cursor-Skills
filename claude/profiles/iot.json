@@ -1,0 +1,14 @@
+{
+  "_description": "IoT, dispositivos embebidos, WASM, RVF, federación de edge.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "ruflo-iot-cognitum@ruflo",
+    "ruflo-wasm@ruflo",
+    "ruflo-rvf@ruflo",
+    "ruflo-federation@ruflo",
+    "ruflo-observability@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills"
+  ]
+}

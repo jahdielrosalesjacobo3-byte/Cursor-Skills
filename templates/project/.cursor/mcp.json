@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "Snyk": {
+      "command": "/opt/homebrew/bin/snyk",
+      "args": ["mcp", "-t", "stdio"],
+      "env": {}
+    },
+    "Semgrep": {
+      "command": "/opt/homebrew/bin/semgrep",
+      "args": ["mcp", "-t", "stdio"],
+      "env": {}
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "/opt/homebrew/bin/semgrep mcp -k inject-secure-defaults -a cursor"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "/opt/homebrew/bin/semgrep mcp -k record-file-edit -a cursor"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "/opt/homebrew/bin/semgrep mcp -k supply-chain-scan -a cursor",
+        "matcher": "Shell"
+      }
+    ],
+    "stop": [
+      {
+        "command": "/opt/homebrew/bin/semgrep mcp -k stop-cli-scan -a cursor",
+        "loop_limit": 3
+      }
+    ]
+  }
+}

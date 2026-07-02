@@ -1,0 +1,444 @@
+{
+  "version": 2,
+  "plugins": {
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-05-11T16:31:29.805Z",
+        "lastUpdated": "2026-05-11T16:31:29.805Z",
+        "gitCommitSha": "f2cbfbefebbfef77321e4c9abc9e949826bea9d7"
+      }
+    ],
+    "file-search@netresearch-claude-code-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/netresearch-claude-code-marketplace/file-search/1.4.0",
+        "version": "1.4.0",
+        "installedAt": "2026-05-11T16:41:00.821Z",
+        "lastUpdated": "2026-05-11T16:41:00.821Z",
+        "gitCommitSha": "a3821ce842bbd877883e60e9c49debd3564b2f5a"
+      }
+    ],
+    "skill-creator@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/claude-plugins-official/skill-creator/unknown",
+        "version": "unknown",
+        "installedAt": "2026-05-11T16:45:02.349Z",
+        "lastUpdated": "2026-05-11T16:45:02.349Z"
+      }
+    ],
+    "hackingtool@hackingtool-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/hackingtool-marketplace/hackingtool/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T16:54:44.661Z",
+        "lastUpdated": "2026-05-11T16:54:44.661Z",
+        "gitCommitSha": "b5d80f007c3c85a0cae48e22e645902d3d5073b8"
+      }
+    ],
+    "antigravity-awesome-skills@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-awesome-skills/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T17:04:56.281Z",
+        "lastUpdated": "2026-05-11T17:04:56.281Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ],
+    "agent-browser@agent-browser": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/agent-browser/agent-browser/82eadcee4124",
+        "version": "82eadcee4124",
+        "installedAt": "2026-05-11T17:21:51.246Z",
+        "lastUpdated": "2026-05-11T17:21:51.246Z",
+        "gitCommitSha": "82eadcee41240b1c8477870f846bc8528e77a8a6"
+      }
+    ],
+    "ruflo-core@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-core/0.2.2",
+        "version": "0.2.2",
+        "installedAt": "2026-05-11T18:34:17.764Z",
+        "lastUpdated": "2026-05-11T18:34:17.764Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-swarm@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-swarm/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:17.485Z",
+        "lastUpdated": "2026-05-11T18:37:17.485Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-loop-workers@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-loop-workers/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:17.963Z",
+        "lastUpdated": "2026-05-11T18:37:17.963Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-security-audit@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-security-audit/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:18.462Z",
+        "lastUpdated": "2026-05-11T18:37:18.462Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-rag-memory@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-rag-memory/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:18.961Z",
+        "lastUpdated": "2026-05-11T18:37:18.961Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-testgen@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-testgen/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:19.457Z",
+        "lastUpdated": "2026-05-11T18:37:19.457Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-docs@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-docs/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:19.960Z",
+        "lastUpdated": "2026-05-11T18:37:19.960Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-autopilot@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-autopilot/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:20.462Z",
+        "lastUpdated": "2026-05-11T18:37:20.462Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-intelligence@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-intelligence/0.3.0",
+        "version": "0.3.0",
+        "installedAt": "2026-05-11T18:37:20.963Z",
+        "lastUpdated": "2026-05-11T18:37:20.963Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-agentdb@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-agentdb/0.3.0",
+        "version": "0.3.0",
+        "installedAt": "2026-05-11T18:37:21.464Z",
+        "lastUpdated": "2026-05-11T18:37:21.464Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-aidefence@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-aidefence/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:21.964Z",
+        "lastUpdated": "2026-05-11T18:37:21.964Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-browser@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-browser/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:22.463Z",
+        "lastUpdated": "2026-05-11T18:37:22.463Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-jujutsu@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-jujutsu/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:22.959Z",
+        "lastUpdated": "2026-05-11T18:37:22.959Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-wasm@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-wasm/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:23.459Z",
+        "lastUpdated": "2026-05-11T18:37:23.459Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-workflows@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-workflows/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:23.963Z",
+        "lastUpdated": "2026-05-11T18:37:23.963Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-daa@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-daa/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:24.460Z",
+        "lastUpdated": "2026-05-11T18:37:24.460Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-ruvllm@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-ruvllm/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:24.963Z",
+        "lastUpdated": "2026-05-11T18:37:24.963Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-rvf@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-rvf/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:25.501Z",
+        "lastUpdated": "2026-05-11T18:37:25.501Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-plugin-creator@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-plugin-creator/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:26.005Z",
+        "lastUpdated": "2026-05-11T18:37:26.005Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-goals@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-goals/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:26.513Z",
+        "lastUpdated": "2026-05-11T18:37:26.513Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-adr@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-adr/0.3.0",
+        "version": "0.3.0",
+        "installedAt": "2026-05-11T18:37:27.015Z",
+        "lastUpdated": "2026-05-11T18:37:27.015Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-cost-tracker@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-cost-tracker/0.16.1",
+        "version": "0.16.1",
+        "installedAt": "2026-05-11T18:37:27.528Z",
+        "lastUpdated": "2026-05-11T18:37:27.528Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-ddd@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-ddd/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:28.015Z",
+        "lastUpdated": "2026-05-11T18:37:28.015Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-federation@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-federation/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:28.516Z",
+        "lastUpdated": "2026-05-11T18:37:28.516Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-iot-cognitum@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-iot-cognitum/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:29.018Z",
+        "lastUpdated": "2026-05-11T18:37:29.018Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-knowledge-graph@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-knowledge-graph/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:29.530Z",
+        "lastUpdated": "2026-05-11T18:37:29.530Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-market-data@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-market-data/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:30.031Z",
+        "lastUpdated": "2026-05-11T18:37:30.031Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-migrations@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-migrations/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:30.541Z",
+        "lastUpdated": "2026-05-11T18:37:30.541Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-neural-trader@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-neural-trader/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:31.043Z",
+        "lastUpdated": "2026-05-11T18:37:31.043Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-observability@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-observability/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:31.550Z",
+        "lastUpdated": "2026-05-11T18:37:31.550Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-ruvector@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-ruvector/0.2.1",
+        "version": "0.2.1",
+        "installedAt": "2026-05-11T18:37:32.035Z",
+        "lastUpdated": "2026-05-11T18:37:32.035Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "ruflo-sparc@ruflo": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/ruflo/ruflo-sparc/0.2.0",
+        "version": "0.2.0",
+        "installedAt": "2026-05-11T18:37:32.535Z",
+        "lastUpdated": "2026-05-11T18:37:32.535Z",
+        "gitCommitSha": "511b2ac0704c4b9fbf3d023dbab7cc5193ae9ce3"
+      }
+    ],
+    "antigravity-bundle-essentials@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-bundle-essentials/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T18:46:53.879Z",
+        "lastUpdated": "2026-05-11T18:46:53.879Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ],
+    "antigravity-bundle-full-stack-developer@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-bundle-full-stack-developer/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T18:46:54.356Z",
+        "lastUpdated": "2026-05-11T18:46:54.356Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ],
+    "antigravity-bundle-web-wizard@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-bundle-web-wizard/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T18:46:54.844Z",
+        "lastUpdated": "2026-05-11T18:46:54.844Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ],
+    "antigravity-bundle-security-engineer@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-bundle-security-engineer/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T18:46:55.338Z",
+        "lastUpdated": "2026-05-11T18:46:55.338Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ],
+    "antigravity-bundle-agent-architect@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-bundle-agent-architect/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T18:46:55.840Z",
+        "lastUpdated": "2026-05-11T18:46:55.840Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ],
+    "antigravity-bundle-devops-cloud@antigravity-awesome-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/jahdielrosales/.claude/plugins/cache/antigravity-awesome-skills/antigravity-bundle-devops-cloud/11.1.0",
+        "version": "11.1.0",
+        "installedAt": "2026-05-11T18:46:56.335Z",
+        "lastUpdated": "2026-05-11T18:46:56.335Z",
+        "gitCommitSha": "ec784a979b3dd578e85153ebdae2fb997ddd78d8"
+      }
+    ]
+  }
+}

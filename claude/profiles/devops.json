@@ -1,0 +1,16 @@
+{
+  "_description": "Migraciones, observabilidad, costos, ADRs, DDD, infraestructura.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "ruflo-migrations@ruflo",
+    "ruflo-observability@ruflo",
+    "ruflo-cost-tracker@ruflo",
+    "ruflo-adr@ruflo",
+    "ruflo-ddd@ruflo",
+    "ruflo-federation@ruflo",
+    "antigravity-bundle-essentials@antigravity-awesome-skills",
+    "antigravity-bundle-devops-cloud@antigravity-awesome-skills"
+  ]
+}

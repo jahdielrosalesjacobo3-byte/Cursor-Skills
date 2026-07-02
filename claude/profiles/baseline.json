@@ -1,0 +1,8 @@
+{
+  "_description": "Núcleo mínimo. Siempre activo. Skills básicas universales.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace"
+  ]
+}

@@ -1,0 +1,24 @@
+# AgentAuditKit configuration
+# https://github.com/sattyamjjain/agent-audit-kit
+
+severity: low
+fail_on: high
+
+scan:
+  - .cursor/
+  - .claude/
+  - mcp.json
+  - "**/mcp.json"
+
+ignore_paths:
+  - skills/
+  - node_modules/
+  - .git/
+
+rules:
+  include_categories:
+    - mcp_configuration
+    - secrets
+    - hook_exfiltration
+    - tool_poisoning
+    - trust_boundary

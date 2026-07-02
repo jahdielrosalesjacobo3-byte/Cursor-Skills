@@ -1,0 +1,10 @@
+{
+  "_description": "Análisis de mercado, backtesting, redes neuronales para trading.",
+  "plugins": [
+    "superpowers@claude-plugins-official",
+    "skill-creator@claude-plugins-official",
+    "file-search@netresearch-claude-code-marketplace",
+    "ruflo-market-data@ruflo",
+    "ruflo-neural-trader@ruflo"
+  ]
+}
