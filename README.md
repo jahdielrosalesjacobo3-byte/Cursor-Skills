@@ -32,12 +32,31 @@ cd SecureSkills
 bash scripts/install-to-local.sh
 ```
 
-Para restaurar también los plugins (cache grande ~350MB):
+`install-to-local.sh` restaura automáticamente **todos los plugins** (cache + marketplaces).
 
-```bash
-rsync -a claude/plugins/cache/ ~/.claude/plugins/cache/
-rsync -a cursor/plugins/cache/ ~/.cursor/plugins/cache/
-```
+## Plugins incluidos
+
+Ver inventario completo en [`plugins-manifest.json`](plugins-manifest.json).
+
+### Claude Code (44 plugins)
+
+| Marketplace | Plugins destacados |
+|-------------|-------------------|
+| `claude-plugins-official` | superpowers, skill-creator |
+| `ruflo` | security-audit, aidefence, swarm, autopilot, intelligence, sparc, goals, etc. |
+| `antigravity-awesome-skills` | essentials, security-engineer, full-stack, web-wizard, devops-cloud |
+| `hackingtool-marketplace` | hackingtool (pentest) |
+| `agent-browser` | agent-browser |
+| `netresearch` | file-search |
+
+### Cursor (10 plugins + marketplaces)
+
+| Origen | Plugins |
+|--------|---------|
+| `cursor-public` | **vercel**, **supabase**, **gsap-skills**, **kraken-cli** |
+| `antigravity-awesome-skills` | agent-architect, apple-platform-design, architecture-design + 30+ bundles |
+| `hackingtool-marketplace` | hackingtool |
+| `agent-browser` | agent-browser |
 
 ## Perfiles Claude disponibles
 

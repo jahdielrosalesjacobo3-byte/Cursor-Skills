@@ -27,10 +27,22 @@ if [ -d "$ROOT/codex/skills" ] && [ "$(ls -A "$ROOT/codex/skills" 2>/dev/null)" 
   rsync -a "$ROOT/codex/skills/" "$HOME/.codex/skills/"
 fi
 
+echo "==> Installing Claude plugins (cache + marketplaces)..."
+mkdir -p "$HOME/.claude/plugins"
+cp "$ROOT/claude/plugins/installed_plugins.json" "$HOME/.claude/plugins/" 2>/dev/null || true
+cp "$ROOT/claude/plugins/known_marketplaces.json" "$HOME/.claude/plugins/" 2>/dev/null || true
+rsync -a "$ROOT/claude/plugins/cache/" "$HOME/.claude/plugins/cache/"
+rsync -a "$ROOT/claude/plugins/marketplaces/" "$HOME/.claude/plugins/marketplaces/"
+
+echo "==> Installing Cursor plugins (cache + marketplaces)..."
+mkdir -p "$HOME/.cursor/plugins"
+rsync -a "$ROOT/cursor/plugins/cache/" "$HOME/.cursor/plugins/cache/"
+rsync -a "$ROOT/cursor/plugins/marketplaces/" "$HOME/.cursor/plugins/marketplaces/"
+if [ -d "$ROOT/cursor/plugins/local" ]; then
+  rsync -a "$ROOT/cursor/plugins/local/" "$HOME/.cursor/plugins/local/"
+fi
+
 echo ""
-echo "==> Plugin caches (optional — large):"
-echo "    Claude:  rsync -a $ROOT/claude/plugins/cache/ ~/.claude/plugins/cache/"
-echo "    Cursor:  rsync -a $ROOT/cursor/plugins/cache/ ~/.cursor/plugins/cache/"
-echo ""
+echo "==> Plugins restored. See plugins-manifest.json for full inventory."
 echo "==> Done. Restart Cursor and Claude Code."
 echo "    Run: snyk auth  (if using Snyk MCP)"
