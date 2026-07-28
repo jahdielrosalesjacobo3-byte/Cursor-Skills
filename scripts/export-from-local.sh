@@ -36,7 +36,8 @@ fi
 mkdir -p "$ROOT/claude/profiles" "$ROOT/claude/skills" "$ROOT/claude/plugins"
 cp "$HOME/.claude/profiles/"*.json "$ROOT/claude/profiles/" 2>/dev/null || true
 # -aL follows symlinks so cyber skills 01-19 land as real directories
-rsync -aL --delete --exclude='.git' "$HOME/.claude/skills/" "$ROOT/claude/skills/"
+rsync -aL --delete --exclude='.git' --exclude='__pycache__' --exclude='*.pyc' \
+  "$HOME/.claude/skills/" "$ROOT/claude/skills/"
 
 # --- Claude plugins ---
 cp "$HOME/.claude/plugins/installed_plugins.json" "$ROOT/claude/plugins/" 2>/dev/null || true
