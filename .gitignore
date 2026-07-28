@@ -12,6 +12,9 @@ credentials.json
 
 # Local install artifacts
 *.sarif
+**/__pycache__/
+*.pyc
+*.pyo
 
 # Nested git repos (should not exist after rsync --exclude .git)
 **/.git/
