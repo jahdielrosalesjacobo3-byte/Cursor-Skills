@@ -1,30 +1,21 @@
 # SecureSkills
 
-Repositorio centralizado de **skills**, **plugins**, **MCPs** y **configuraciones de seguridad** para el equipo SecureCorp-Mexico.
+Repositorio centralizado de **skills**, **agents/subagents**, **plugins**, **MCPs** y **configuraciones de seguridad** para el equipo SecureCorp-Mexico.
 
 Compatible con **Cursor Agent**, **Claude Code** y **Codex**.
 
-## Estructura
+Inventario actual (ver [`plugins-manifest.json`](plugins-manifest.json)):
 
-```
-SecureSkills/
-├── cursor/                 # Config global Cursor
-│   ├── mcp.json            # Snyk + Semgrep MCP
-│   ├── hooks.json          # Semgrep Guardian hooks
-│   ├── skills/             # Skills oficiales Cursor (~/.cursor/skills-cursor)
-│   └── plugins/            # Cache y marketplaces de plugins Cursor
-├── claude/                 # Config Claude Code
-│   ├── profiles/           # Perfiles (security, web, devops, mega, etc.)
-│   ├── skills/             # Skills personales + seguridad + webkit
-│   └── plugins/            # Plugins instalados + cache (ruflo, antigravity, etc.)
-├── codex/                  # Skills Codex (linear, system)
-├── security-skills/        # Repos de seguridad (OWASP, Trail of Bits, Masriyan, toshipon)
-├── templates/project/      # Plantilla .cursor + .claude para nuevos proyectos
-├── scripts/                # Instalación local + security stack
-└── .github/workflows/      # CI: AgentAuditKit + Semgrep
-```
+| Área | Cantidad |
+|------|----------|
+| Cursor skills | 20 |
+| Cursor agents / subagents | 48 |
+| Cursor plugins | 11 |
+| Cursor MCPs | Snyk + Semgrep |
+| Claude plugins | 44 |
+| Claude skills | 40 |
 
-## Instalación rápida
+## Instalación rápida (equipo)
 
 ```bash
 git clone https://github.com/SecureCorp-Mexico/SecureSkills.git
@@ -32,67 +23,152 @@ cd SecureSkills
 bash scripts/install-to-local.sh
 ```
 
-`install-to-local.sh` restaura automáticamente **todos los plugins** (cache + marketplaces).
+Esto restaura en tu máquina:
 
-## Plugins incluidos
+- `~/.cursor/skills-cursor/` — skills de agents/subagents
+- `~/.cursor/agents/` — definiciones de subagents (Task)
+- `~/.cursor/mcp.json` + `hooks.json` — Snyk/Semgrep + Semgrep Guardian
+- `~/.cursor/plugins/` — cache + marketplaces
+- `~/.claude/skills/`, `profiles/`, `plugins/`
+- `~/.codex/skills/` (si aplica)
 
-Ver inventario completo en [`plugins-manifest.json`](plugins-manifest.json).
+Luego:
 
-### Claude Code (44 plugins)
+1. Reinicia **Cursor** y **Claude Code**
+2. Ejecuta `snyk auth` (MCP Snyk)
+3. (Opcional) siembra la plantilla de proyecto:
 
-| Marketplace | Plugins destacados |
-|-------------|-------------------|
-| `claude-plugins-official` | superpowers, skill-creator |
-| `ruflo` | security-audit, aidefence, swarm, autopilot, intelligence, sparc, goals, etc. |
-| `antigravity-awesome-skills` | essentials, security-engineer, full-stack, web-wizard, devops-cloud |
-| `hackingtool-marketplace` | hackingtool (pentest) |
-| `agent-browser` | agent-browser |
-| `netresearch` | file-search |
+```bash
+SECURESKILLS_SEED_PROJECT=1 SECURESKILLS_PROJECT_ROOT=/ruta/a/tu/repo \
+  bash scripts/install-to-local.sh
+```
 
-### Cursor (10 plugins + marketplaces)
+## Estructura
+
+```
+SecureSkills/
+├── cursor/
+│   ├── mcp.json            # Snyk + Semgrep MCP
+│   ├── hooks.json          # Semgrep Guardian hooks
+│   ├── skills/             # Skills Cursor (~/.cursor/skills-cursor)
+│   ├── agents/             # 48 subagents Task (~/.cursor/agents)
+│   └── plugins/            # Cache + marketplaces Cursor
+├── claude/
+│   ├── profiles/           # security, web, devops, mega, etc.
+│   ├── skills/             # 40 skills (cyber 01–19, OWASP, webkit…)
+│   └── plugins/            # 44 plugins + marketplaces
+├── codex/skills/
+├── security-skills/        # OWASP, Trail of Bits, Masriyan, toshipon
+├── templates/project/      # Plantilla .cursor para nuevos repos
+├── scripts/
+│   ├── install-to-local.sh # Equipo: cargar todo
+│   ├── export-from-local.sh# Maintainer: re-exportar desde tu máquina
+│   └── setup-security-stack.sh
+└── .github/workflows/      # CI AgentAuditKit + Semgrep
+```
+
+## Cursor — Skills (agents / subagents)
+
+| Skill | Uso |
+|-------|-----|
+| `review-security` | Subagente security-review sobre diffs |
+| `review-bugbot` | Bugbot PR review |
+| `review` | Review general |
+| `create-subagent` | Crear nuevos subagents |
+| `create-skill` / `create-rule` / `create-hook` | Extender Cursor |
+| `automate` / `loop` / `babysit` | Automatización y loops |
+| `canvas` | Canvas analíticos |
+| `sdk` | Cursor SDK |
+| `onboard` / `env-setup` | Onboarding / entorno |
+| `split-to-prs` / `shell` / `statusline` | Workflows utilitarios |
+
+## Cursor — Agents (48)
+
+Definiciones en `cursor/agents/` (se instalan en `~/.cursor/agents/`). Destacados:
+
+| Agent | Rol |
+|-------|-----|
+| `security-auditor` | Auditoría y remediación de vulnerabilidades |
+| `safety-specialist` | AI safety / PII / defensa adaptativa |
+| `architect` / `ai-architect` | Arquitectura de sistemas y apps AI |
+| `coder` / `reviewer` / `tester` | Implementación, review, TDD |
+| `browser-agent` | Automatización Playwright |
+| `deep-researcher` / `dossier-investigator` | Investigación multi-fuente |
+| `sparc-orchestrator` / `coordinator` | Orquestación de swarms |
+| `deployment-expert` / `performance-optimizer` | Deploy y performance (Vercel) |
+| `git-specialist` / `migration-engineer` | Git / migraciones DB |
+| `agentdb-specialist` / `memory-specialist` / `vector-engineer` | Memoria y vectores |
+
+Lista completa en `plugins-manifest.json` → `cursor.agents`.
+
+## Cursor — Plugins
 
 | Origen | Plugins |
 |--------|---------|
-| `cursor-public` | **vercel**, **supabase**, **gsap-skills**, **kraken-cli** |
-| `antigravity-awesome-skills` | agent-architect, apple-platform-design, architecture-design + 30+ bundles |
+| `cursor-public` | **vercel**, **supabase**, **figma**, **gsap-skills**, **kraken-cli** |
+| `antigravity-awesome-skills` | agent-architect, architecture-design, apple-platform-design + bundles |
 | `hackingtool-marketplace` | hackingtool |
 | `agent-browser` | agent-browser |
 
-## Perfiles Claude disponibles
-
-| Perfil | Uso |
-|--------|-----|
-| `security.json` | Pentest, auditoría, blue team, ruflo, antigravity |
-| `web.json` | Desarrollo web |
-| `devops.json` | Infraestructura y CI/CD |
-| `research.json` | Investigación y OSINT |
-| `mega.json` | Stack completo |
-| `autonomous.json` | Agentes autónomos |
-
-## MCPs configurados (Cursor)
+## Cursor — MCPs
 
 | Servidor | Función |
 |----------|---------|
 | **Snyk** | SCA, SAST, IaC, containers |
 | **Semgrep** | SAST determinístico + hooks |
 
-Requisito: `snyk auth` antes del primer uso.
+Requisito: `snyk auth` y CLI Semgrep instalado (`brew install semgrep` / `pipx`).
 
-## Skills de seguridad destacados
+## Claude Code
 
-| Skill | Plataforma | Descripción |
-|-------|------------|-------------|
-| `owasp-security` | Claude | OWASP Top 10:2025, ASVS 5.0, LLM/Agentic |
-| `security-audit` | Claude | Auditoría full-stack (`/security-audit all`) |
-| `cyber-blue-team-defense` | Claude | Hardening, detection engineering |
-| `review-security` | Cursor | Subagente security-review en diffs |
-| `review-bugbot` | Cursor | Bugbot PR review |
+### Plugins (44)
 
-Ver `security-skills/` para repos completos y `scripts/setup-security-stack.sh` para el stack DevSecOps.
+Marketplaces: `ruflo`, `antigravity-awesome-skills`, `claude-plugins-official`, `hackingtool-marketplace`, `agent-browser`, `netresearch`.
+
+Destacados ruflo: `security-audit`, `aidefence`, `swarm`, `autopilot`, `intelligence`, `sparc`, `goals`.
+
+### Skills (40)
+
+- Cyber suite `01-recon-osint` … `19-grc-compliance`
+- `owasp-security`, `security-audit`, `cyber-*`
+- Webkit frontend / Vercel / Playwright
+
+### Perfiles
+
+| Perfil | Uso |
+|--------|-----|
+| `security.json` | Pentest, auditoría, blue team |
+| `web.json` | Desarrollo web |
+| `devops.json` | Infra y CI/CD |
+| `research.json` | Investigación / OSINT |
+| `mega.json` | Stack completo |
+| `autonomous.json` | Agentes autónomos |
+
+## Plantilla de proyecto
+
+`templates/project/.cursor/` incluye:
+
+- `mcp.json` — Snyk + Semgrep
+- `hooks.json` — Semgrep Guardian
+- `rules/security-scanning.mdc` — shift-left (Snyk/Semgrep en cada cambio)
+
+## Mantenimiento (maintainers)
+
+Actualizar el repo desde tu máquina (Cursor cerrado o idle):
+
+```bash
+cd SecureSkills
+bash scripts/export-from-local.sh
+git status
+git add -A
+git commit -m "Sync Cursor/Claude skills, agents, plugins and MCPs."
+git push
+```
 
 ## CI/CD
 
 El workflow `agent-security.yml` ejecuta:
+
 - **AgentAuditKit** — auditoría de configs MCP y agentes
 - **Semgrep** — SAST con salida SARIF
 
@@ -107,20 +183,12 @@ El workflow `agent-security.yml` ejecuta:
 
 Marketplace local también en `security-skills/trailofbits-skills/`.
 
-## Mantenimiento
-
-Para actualizar el repo desde tu máquina local:
-
-```bash
-# Re-ejecutar sync (desde el directorio del repo clonado)
-bash scripts/export-from-local.sh   # crear si se necesita export incremental
-```
-
 ## Seguridad
 
 - No commitear `.env`, tokens ni credenciales
 - Revisar `.cursor/mcp.json` en cada PR (vector MCPoison)
 - Mantener Cursor actualizado
+- Rotar API keys si se exponen en chats
 
 ---
 

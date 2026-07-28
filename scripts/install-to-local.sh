@@ -1,17 +1,27 @@
 #!/usr/bin/env bash
 # Restore SecureSkills configs to local Cursor / Claude / Codex paths
+# Usage (team onboarding):
+#   git clone https://github.com/SecureCorp-Mexico/SecureSkills.git
+#   cd SecureSkills && bash scripts/install-to-local.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-echo "==> Installing Cursor config..."
+echo "==> Installing Cursor MCP + hooks..."
 mkdir -p "$HOME/.cursor"
 cp "$ROOT/cursor/mcp.json" "$HOME/.cursor/mcp.json"
 cp "$ROOT/cursor/hooks.json" "$HOME/.cursor/hooks.json"
 
-echo "==> Installing Cursor skills..."
+echo "==> Installing Cursor skills (agents/subagents entrypoints)..."
 mkdir -p "$HOME/.cursor/skills-cursor"
 rsync -a "$ROOT/cursor/skills/" "$HOME/.cursor/skills-cursor/"
+
+echo "==> Installing Cursor agents (Task subagents)..."
+if [ -d "$ROOT/cursor/agents" ] && [ "$(ls -A "$ROOT/cursor/agents" 2>/dev/null)" ]; then
+  mkdir -p "$HOME/.cursor/agents"
+  rsync -a "$ROOT/cursor/agents/" "$HOME/.cursor/agents/"
+  echo "    Agents: $(ls "$HOME/.cursor/agents" | wc -l | tr -d ' ')"
+fi
 
 echo "==> Installing Claude profiles..."
 mkdir -p "$HOME/.claude/profiles"
@@ -42,7 +52,16 @@ if [ -d "$ROOT/cursor/plugins/local" ]; then
   rsync -a "$ROOT/cursor/plugins/local/" "$HOME/.cursor/plugins/local/"
 fi
 
+# Optional: seed current project with SecureCorp .cursor template
+if [ "${SECURESKILLS_SEED_PROJECT:-}" = "1" ] && [ -d "$ROOT/templates/project/.cursor" ]; then
+  TARGET="${SECURESKILLS_PROJECT_ROOT:-.}"
+  mkdir -p "$TARGET/.cursor"
+  rsync -a "$ROOT/templates/project/.cursor/" "$TARGET/.cursor/"
+  echo "==> Seeded project template into $TARGET/.cursor"
+fi
+
 echo ""
 echo "==> Plugins restored. See plugins-manifest.json for full inventory."
 echo "==> Done. Restart Cursor and Claude Code."
 echo "    Run: snyk auth  (if using Snyk MCP)"
+echo "    Optional: SECURESKILLS_SEED_PROJECT=1 bash scripts/install-to-local.sh"
