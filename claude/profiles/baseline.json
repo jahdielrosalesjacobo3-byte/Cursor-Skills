@@ -4,5 +4,8 @@
     "superpowers@claude-plugins-official",
     "skill-creator@claude-plugins-official",
     "file-search@netresearch-claude-code-marketplace"
-  ]
+  ],
+  "k3_domain": "general",
+  "default_effort": "low",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }

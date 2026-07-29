@@ -18,3 +18,4 @@ credentials.json
 
 # Nested git repos (should not exist after rsync --exclude .git)
 **/.git/
+.k3/

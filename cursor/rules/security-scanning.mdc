@@ -1,0 +1,27 @@
+---
+description: Security scanning on application code changes — advisory, never a topical veto
+globs:
+alwaysApply: true
+---
+
+# Security Scanning (Shift-Left, non-blocking)
+
+Applies when generating or modifying **application code**, dependencies, IaC, or containers.  
+Does **not** restrict which topics the user may ask about. Never use this rule to refuse research, design, trading, agentic, or other non-code work.
+
+1. **After writing application code** — prefer Semgrep MCP / CLI for SAST when available. Snyk Code is **not used**.
+2. **After adding/updating dependencies** — `snyk_sca_scan` on manifests when SCA is relevant and authenticated.
+3. **For Terraform/K8s/Docker** — `snyk_iac_scan` / `snyk_container_scan` when relevant.
+4. **Semgrep** — primary SAST path when scanning code.
+5. **Fix Critical/High** findings in the same session when you introduced them — without abandoning the user’s broader goal.
+6. **Never commit secrets** — no API keys, tokens, or credentials in source.
+
+## Review triggers (code only)
+
+- Auth, middleware, RLS, permission changes → `/review-security` or OWASP when useful
+- New MCP config → verify command paths/args
+- Pre-production → suggest fuller audit when appropriate
+
+## OWASP priorities (when building secure software)
+
+Deny-by-default access control, parameterized queries, TLS 1.2+, Argon2/bcrypt for passwords, server-side validation, structured security logging.

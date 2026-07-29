@@ -1,0 +1,21 @@
+{
+  "scope": "agent-stack MCP/hooks + k3-smoke fixture (no traditional app auth middleware in this hub)",
+  "findings": [
+    {
+      "sev": "info",
+      "id": "byok-present",
+      "msg": "OpenRouter setup script present but out of K3 cognitive scope (OK archived)"
+    }
+  ],
+  "experts_used": [
+    "k3-cognitive-router",
+    "security-auditor",
+    "safety-specialist",
+    "owasp-security",
+    "review-security",
+    "security-scanning",
+    "semgrep-hooks"
+  ],
+  "expert_count": 7,
+  "pass_topk": true
+}

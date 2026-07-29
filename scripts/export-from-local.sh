@@ -24,6 +24,22 @@ fi
 cp "$HOME/.cursor/mcp.json" "$ROOT/cursor/mcp.json"
 cp "$HOME/.cursor/hooks.json" "$ROOT/cursor/hooks.json"
 
+# --- Cursor rules (K3 + security) ---
+if [ -d "$HOME/.cursor/rules" ]; then
+  mkdir -p "$ROOT/cursor/rules"
+  rsync -a "$HOME/.cursor/rules/" "$ROOT/cursor/rules/"
+  echo "    Cursor rules: $(ls "$ROOT/cursor/rules"/*.mdc 2>/dev/null | wc -l | tr -d ' ')"
+fi
+
+# --- Cursor user skills (k3-cognitive-router; exclude cyber symlinks) ---
+if [ -d "$HOME/.cursor/skills/k3-cognitive-router" ]; then
+  mkdir -p "$ROOT/cursor/user-skills/k3-cognitive-router"
+  rsync -a --delete \
+    "$HOME/.cursor/skills/k3-cognitive-router/" \
+    "$ROOT/cursor/user-skills/k3-cognitive-router/"
+  echo "    Exported k3-cognitive-router user skill"
+fi
+
 # --- Project template (from skillsClaude if present) ---
 PROJECT_CURSOR="${SECURESKILLS_PROJECT_CURSOR:-$HOME/Documents/skillsClaude/.cursor}"
 if [ -d "$PROJECT_CURSOR" ]; then
@@ -35,9 +51,19 @@ fi
 # --- Claude profiles + skills ---
 mkdir -p "$ROOT/claude/profiles" "$ROOT/claude/skills" "$ROOT/claude/plugins"
 cp "$HOME/.claude/profiles/"*.json "$ROOT/claude/profiles/" 2>/dev/null || true
-# -aL follows symlinks so cyber skills 01-19 land as real directories
+# -aL follows symlinks so numbered cyber 01-19 land as real directories when
+# local points at SECURECORP. Then re-assert deprecated cyber-* as relative symlinks.
 rsync -aL --delete --exclude='.git' --exclude='__pycache__' --exclude='*.pyc' \
   "$HOME/.claude/skills/" "$ROOT/claude/skills/"
+(
+  cd "$ROOT/claude/skills"
+  rm -rf cyber-web-security cyber-blue-team-defense cyber-ai-llm-security cyber-grc-compliance
+  ln -sfn 09-web-security cyber-web-security
+  ln -sfn 15-blue-team-defense cyber-blue-team-defense
+  ln -sfn 16-ai-llm-security cyber-ai-llm-security
+  ln -sfn 19-grc-compliance cyber-grc-compliance
+  echo "    Re-linked cyber-* aliases → numbered 01–19"
+)
 
 # --- Claude plugins ---
 cp "$HOME/.claude/plugins/installed_plugins.json" "$ROOT/claude/plugins/" 2>/dev/null || true
@@ -113,6 +139,16 @@ agents_dir = repo / "cursor" / "agents"
 agents = sorted([p.stem for p in agents_dir.glob("*.md")]) if agents_dir.exists() else []
 manifest["cursor"]["agents"] = agents
 manifest["cursor"]["agentsCount"] = len(agents)
+
+rules_dir = repo / "cursor" / "rules"
+rules = sorted([p.name for p in rules_dir.glob("*.mdc")]) if rules_dir.exists() else []
+manifest["cursor"]["rules"] = rules
+user_skills = []
+us = repo / "cursor" / "user-skills"
+if us.exists():
+    user_skills = sorted([p.name for p in us.iterdir() if p.is_dir()])
+manifest["cursor"]["userSkills"] = user_skills
+manifest["k3"] = {"registry": "expert-registry.yaml", "cognitive": True}
 
 mcp = repo / "cursor" / "mcp.json"
 if mcp.exists():

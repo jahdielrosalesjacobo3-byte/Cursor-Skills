@@ -1,26 +1,27 @@
 ---
-description: Security guardrails — scan code with Snyk and Semgrep during development
+description: Security scanning on application code changes — advisory, never a topical veto
 globs:
 alwaysApply: true
 ---
 
-# Security Scanning (Shift-Left)
+# Security Scanning (Shift-Left, non-blocking)
 
-When generating or modifying application code, dependencies, IaC, or containers:
+Applies when generating or modifying **application code**, dependencies, IaC, or containers.  
+Does **not** restrict which topics the user may ask about. Never use this rule to refuse research, design, trading, agentic, or other non-code work.
 
-1. **After writing code** — call `snyk_code_scan` on changed files/directories.
-2. **After adding/updating dependencies** — call `snyk_sca_scan` on manifest files (`package.json`, `requirements.txt`, `pyproject.toml`, etc.).
-3. **For Terraform/K8s/Docker** — call `snyk_iac_scan` or `snyk_container_scan` when relevant.
-4. **Use Semgrep MCP** — run security scans via Semgrep tools before considering the task complete.
-5. **Fix findings** — remediate Critical/High issues in the same session before finishing.
-6. **Never commit secrets** — no API keys, tokens, or credentials in source code.
+1. **After writing application code** — prefer Semgrep MCP / CLI for SAST when available. Snyk Code is **not used**.
+2. **After adding/updating dependencies** — `snyk_sca_scan` on manifests when SCA is relevant and authenticated.
+3. **For Terraform/K8s/Docker** — `snyk_iac_scan` / `snyk_container_scan` when relevant.
+4. **Semgrep** — primary SAST path when scanning code.
+5. **Fix Critical/High** findings in the same session when you introduced them — without abandoning the user’s broader goal.
+6. **Never commit secrets** — no API keys, tokens, or credentials in source.
 
-## Review triggers
+## Review triggers (code only)
 
-- Auth, middleware, RLS, or permission changes → also run `/review-security` or OWASP checklist.
-- New MCP server config (`.cursor/mcp.json`, `mcp.json`) → treat as high-risk; verify command paths and args.
-- Pre-production changes → suggest `/security-audit all` (Claude) or full CI pipeline.
+- Auth, middleware, RLS, permission changes → `/review-security` or OWASP when useful
+- New MCP config → verify command paths/args
+- Pre-production → suggest fuller audit when appropriate
 
-## OWASP priorities
+## OWASP priorities (when building secure software)
 
 Deny-by-default access control, parameterized queries, TLS 1.2+, Argon2/bcrypt for passwords, server-side validation, structured security logging.

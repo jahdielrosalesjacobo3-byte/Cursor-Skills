@@ -11,5 +11,8 @@
   ],
   "_global_skills": [
     "clone-website (~/.claude/skills/clone-website/SKILL.md) - clonado pixel-perfect de sitios web"
-  ]
+  ],
+  "k3_domain": "design",
+  "default_effort": "high",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }

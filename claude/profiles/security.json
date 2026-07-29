@@ -28,5 +28,8 @@
     "cyber-blue-team-defense",
     "cyber-web-security",
     "cyber-ai-llm-security"
-  ]
+  ],
+  "k3_domain": "security",
+  "default_effort": "max",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }

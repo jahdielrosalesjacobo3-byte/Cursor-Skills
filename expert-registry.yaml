@@ -1,0 +1,874 @@
+# SecureSkills Expert Registry — K3 LatentMoE-inspired catalog
+# Canonical inventory for Cursor / Claude / Codex agent routing.
+# activation: core = always eligible; on-demand = activate only when routed
+# shared: true = always-on (like K3 shared experts)
+
+version: 2
+updated: "2026-07-29"
+source_of_truth: SecureSkills
+polish: "tech-report P1-P5: RAOVA, GRM, teacher_matrix, partial-rollout, harness-profiles"
+
+domains:
+  - general
+  - agentic
+  - coding
+  - security
+  - design
+  - infra
+  - trading
+  - research
+
+effort_levels:
+  - low
+  - high
+  - max
+
+routing_defaults:
+  max_active_experts: 16
+  typical_active_experts: 5
+  full_spectrum_max_experts: 16
+  topical_locks: false
+  shared_experts:
+    - security-scanning
+    - semgrep-hooks
+  shared_experts_role: advisory_on_code_only
+  quantile_balancing: true
+  deprecated_openrouter_kimi_byok: true
+  snyk_code: disabled
+  posture: full-spectrum-capable
+
+# ---------------------------------------------------------------------------
+# Shared experts (always on)
+# ---------------------------------------------------------------------------
+experts:
+  - id: security-scanning
+    domain: security
+    runtime: cursor-rule
+    path: cursor/rules/security-scanning.mdc
+    activation: core
+    shared: true
+    effort_default: low
+    triggers: ["code change", "dependency", "IaC", "container", "mcp config"]
+
+  - id: semgrep-hooks
+    domain: security
+    runtime: cursor-hook
+    path: cursor/hooks.json
+    activation: core
+    shared: true
+    effort_default: low
+    triggers: ["sessionStart", "afterFileEdit", "postToolUse", "stop"]
+
+  - id: k3-cognitive-router
+    domain: agentic
+    runtime: cursor-skill
+    path: cursor/user-skills/k3-cognitive-router
+    activation: core
+    shared: false
+    effort_default: high
+    triggers: ["complex task", "multi-agent", "long-horizon", "orchestrate"]
+    aliases: ["k3-router", "cognitive-router"]
+
+  - id: k3-cognitive-router-agent
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/k3-cognitive-router.md
+    activation: core
+    shared: false
+    effort_default: high
+    triggers: ["Task k3-cognitive-router", "explicit orchestration"]
+
+# ---------------------------------------------------------------------------
+# Cursor agents (ruflo) — domain-tagged for Top-k routing
+# ---------------------------------------------------------------------------
+  - id: sparc-orchestrator
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/sparc-orchestrator.md
+    activation: core
+    effort_default: high
+    triggers: ["feature", "SPARC", "spec to ship"]
+
+  - id: coordinator
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/coordinator.md
+    activation: core
+    effort_default: high
+    triggers: ["swarm", "multi-agent coordination"]
+
+  - id: autopilot-coordinator
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/autopilot-coordinator.md
+    activation: on-demand
+    effort_default: max
+    triggers: ["autopilot", "loop", "unattended"]
+
+  - id: goal-planner
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/goal-planner.md
+    activation: core
+    effort_default: high
+    triggers: ["GOAP", "long objective", "milestones"]
+
+  - id: workflow-specialist
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/workflow-specialist.md
+    activation: core
+    effort_default: high
+    triggers: ["workflow", "pipeline", "automation"]
+
+  - id: coder
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/coder.md
+    activation: core
+    effort_default: high
+    triggers: ["implement", "code", "refactor"]
+
+  - id: tester
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/tester.md
+    activation: core
+    effort_default: high
+    triggers: ["test", "TDD", "coverage"]
+
+  - id: reviewer
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/reviewer.md
+    activation: core
+    effort_default: high
+    triggers: ["review", "PR", "quality"]
+
+  - id: git-specialist
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/git-specialist.md
+    activation: core
+    effort_default: low
+    triggers: ["git", "diff", "PR management"]
+
+  - id: architect
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/architect.md
+    activation: core
+    effort_default: high
+    triggers: ["architecture", "API contract", "module boundary"]
+
+  - id: ai-architect
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/ai-architect.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["AI SDK", "Vercel AI", "agent app"]
+
+  - id: docs-writer
+    domain: general
+    runtime: cursor-agent
+    path: cursor/agents/docs-writer.md
+    activation: core
+    effort_default: low
+    triggers: ["documentation", "README", "ADR writeup"]
+
+  - id: adr-architect
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/adr-architect.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["ADR", "architecture decision"]
+
+  - id: domain-modeler
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/domain-modeler.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["DDD", "bounded context", "aggregate"]
+
+  - id: security-auditor
+    domain: security
+    runtime: cursor-agent
+    path: cursor/agents/security-auditor.md
+    activation: core
+    effort_default: max
+    triggers: ["security audit", "vulnerability", "OWASP"]
+
+  - id: safety-specialist
+    domain: security
+    runtime: cursor-agent
+    path: cursor/agents/safety-specialist.md
+    activation: core
+    effort_default: high
+    triggers: ["PII", "prompt injection", "AI safety"]
+
+  - id: researcher
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/researcher.md
+    activation: core
+    effort_default: high
+    triggers: ["research", "prior art"]
+
+  - id: deep-researcher
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/deep-researcher.md
+    activation: core
+    effort_default: max
+    triggers: ["deep research", "multi-source"]
+
+  - id: dossier-investigator
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/dossier-investigator.md
+    activation: on-demand
+    effort_default: max
+    triggers: ["dossier", "investigation graph"]
+
+  - id: browser-agent
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/browser-agent.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["browser", "Playwright", "web UI verify"]
+
+  - id: deployment-expert
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/deployment-expert.md
+    activation: core
+    effort_default: high
+    triggers: ["deploy", "Vercel", "CI/CD"]
+
+  - id: performance-optimizer
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/performance-optimizer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["performance", "Core Web Vitals", "Lighthouse"]
+
+  - id: migration-engineer
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/migration-engineer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["migration", "database schema"]
+
+  - id: observability-engineer
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/observability-engineer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["logging", "tracing", "metrics"]
+
+  - id: memory-specialist
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/memory-specialist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["RAG", "memory", "hybrid search"]
+
+  - id: vector-engineer
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/vector-engineer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["HNSW", "embeddings", "ruvector"]
+
+  - id: intelligence-specialist
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/intelligence-specialist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["intelligence pipeline", "distill"]
+
+  - id: session-specialist
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/session-specialist.md
+    activation: on-demand
+    effort_default: low
+    triggers: ["session persist", "cross-conversation"]
+
+  - id: horizon-tracker
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/horizon-tracker.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["long-horizon", "milestones", "drift"]
+
+  - id: loop-worker-coordinator
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/loop-worker-coordinator.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["loop", "cron workers"]
+
+  - id: federation-coordinator
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/federation-coordinator.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["federation", "cross-install"]
+
+  - id: device-coordinator
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/device-coordinator.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["devices", "fleet", "Cognitum"]
+
+  - id: fleet-manager
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/fleet-manager.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["firmware", "fleet policy"]
+
+  - id: trading-strategist
+    domain: trading
+    runtime: cursor-agent
+    path: cursor/agents/trading-strategist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["trading strategy", "LSTM", "neural trader"]
+
+  - id: market-analyst
+    domain: trading
+    runtime: cursor-agent
+    path: cursor/agents/market-analyst.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["market regime", "RSI", "MACD"]
+
+  - id: backtest-engineer
+    domain: trading
+    runtime: cursor-agent
+    path: cursor/agents/backtest-engineer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["backtest", "walk-forward"]
+
+  - id: risk-analyst
+    domain: trading
+    runtime: cursor-agent
+    path: cursor/agents/risk-analyst.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["VaR", "Kelly", "portfolio risk"]
+
+  - id: data-engineer
+    domain: trading
+    runtime: cursor-agent
+    path: cursor/agents/data-engineer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["OHLCV", "market data ingest"]
+
+  - id: cost-analyst
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/cost-analyst.md
+    activation: on-demand
+    effort_default: low
+    triggers: ["token cost", "budget"]
+
+  - id: llm-specialist
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/llm-specialist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["local LLM", "RuVLLM", "LoRA"]
+
+  - id: agentdb-specialist
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/agentdb-specialist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["AgentDB", "HNSW index"]
+
+  - id: graph-navigator
+    domain: research
+    runtime: cursor-agent
+    path: cursor/agents/graph-navigator.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["knowledge graph", "entities"]
+
+  - id: daa-specialist
+    domain: agentic
+    runtime: cursor-agent
+    path: cursor/agents/daa-specialist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["DAA", "adaptive agents"]
+
+  - id: plugin-developer
+    domain: coding
+    runtime: cursor-agent
+    path: cursor/agents/plugin-developer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["Claude plugin", "skill packaging"]
+
+  - id: wasm-specialist
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/wasm-specialist.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["WASM sandbox"]
+
+  - id: telemetry-analyzer
+    domain: infra
+    runtime: cursor-agent
+    path: cursor/agents/telemetry-analyzer.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["telemetry anomaly", "Z-score"]
+
+  - id: witness-auditor
+    domain: security
+    runtime: cursor-agent
+    path: cursor/agents/witness-auditor.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["Ed25519 witness", "provenance"]
+
+  - id: witness-curator
+    domain: security
+    runtime: cursor-agent
+    path: cursor/agents/witness-curator.md
+    activation: on-demand
+    effort_default: high
+    triggers: ["witness manifest", "ADR-103"]
+
+# ---------------------------------------------------------------------------
+# Claude cyber skills — CANONICAL = numbered 01–19
+# cyber-* names are deprecated aliases (same content / overlap)
+# ---------------------------------------------------------------------------
+  - id: 01-recon-osint
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/01-recon-osint
+    activation: core
+    effort_default: high
+    triggers: ["OSINT", "recon"]
+    aliases: []
+
+  - id: 02-vulnerability-scanner
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/02-vulnerability-scanner
+    activation: core
+    effort_default: high
+    triggers: ["vuln scan"]
+
+  - id: 03-exploit-development
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/03-exploit-development
+    activation: on-demand
+    effort_default: max
+    triggers: ["exploit development"]
+    notes: "Authorized engagement only"
+
+  - id: 04-reverse-engineering
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/04-reverse-engineering
+    activation: on-demand
+    effort_default: high
+    triggers: ["RE", "binary analysis"]
+
+  - id: 05-malware-analysis
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/05-malware-analysis
+    activation: on-demand
+    effort_default: high
+    triggers: ["malware"]
+
+  - id: 06-threat-hunting
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/06-threat-hunting
+    activation: core
+    effort_default: high
+    triggers: ["threat hunt"]
+
+  - id: 07-incident-response
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/07-incident-response
+    activation: core
+    effort_default: max
+    triggers: ["IR", "incident"]
+
+  - id: 08-network-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/08-network-security
+    activation: core
+    effort_default: high
+    triggers: ["network security"]
+
+  - id: 09-web-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/09-web-security
+    activation: core
+    effort_default: high
+    triggers: ["web security", "OWASP web"]
+    aliases: ["cyber-web-security"]
+    deprecates: ["cyber-web-security"]
+
+  - id: 15-blue-team-defense
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/15-blue-team-defense
+    activation: core
+    effort_default: high
+    triggers: ["blue team", "hardening"]
+    aliases: ["cyber-blue-team-defense"]
+    deprecates: ["cyber-blue-team-defense"]
+
+  - id: 16-ai-llm-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/16-ai-llm-security
+    activation: core
+    effort_default: high
+    triggers: ["LLM security", "OWASP LLM"]
+    aliases: ["cyber-ai-llm-security"]
+    deprecates: ["cyber-ai-llm-security"]
+
+  - id: 19-grc-compliance
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/19-grc-compliance
+    activation: core
+    effort_default: high
+    triggers: ["GRC", "compliance"]
+    aliases: ["cyber-grc-compliance"]
+    deprecates: ["cyber-grc-compliance"]
+
+  - id: 10-cloud-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/10-cloud-security
+    activation: core
+    effort_default: high
+    triggers: ["cloud security"]
+
+  - id: 11-csoc-automation
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/11-csoc-automation
+    activation: on-demand
+    effort_default: high
+    triggers: ["CSOC", "SOC automation"]
+
+  - id: 12-log-analysis
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/12-log-analysis
+    activation: core
+    effort_default: high
+    triggers: ["log analysis", "SIEM"]
+
+  - id: 13-crypto-analysis
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/13-crypto-analysis
+    activation: on-demand
+    effort_default: high
+    triggers: ["crypto analysis"]
+
+  - id: 14-red-team-ops
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/14-red-team-ops
+    activation: on-demand
+    effort_default: max
+    triggers: ["red team"]
+    notes: "Authorized engagement only"
+
+  - id: 17-mobile-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/17-mobile-security
+    activation: on-demand
+    effort_default: high
+    triggers: ["mobile security"]
+
+  - id: 18-ot-ics-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/18-ot-ics-security
+    activation: on-demand
+    effort_default: high
+    triggers: ["OT", "ICS"]
+
+  - id: owasp-security
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/owasp-security
+    activation: core
+    effort_default: high
+    triggers: ["OWASP Top 10", "ASVS"]
+
+  - id: security-audit
+    domain: security
+    runtime: claude-skill
+    path: claude/skills/security-audit
+    activation: core
+    effort_default: max
+    triggers: ["full-stack security audit"]
+
+# ---------------------------------------------------------------------------
+# Design / webkit (core subset)
+# ---------------------------------------------------------------------------
+  - id: webkit-frontend-design
+    domain: design
+    runtime: claude-skill
+    path: claude/skills/webkit-frontend-design
+    activation: core
+    effort_default: high
+    triggers: ["frontend design", "landing"]
+
+  - id: webkit-shadcn-ui
+    domain: design
+    runtime: claude-skill
+    path: claude/skills/webkit-shadcn-ui
+    activation: core
+    effort_default: high
+    triggers: ["shadcn", "UI components"]
+
+  - id: webkit-vercel-deploy
+    domain: infra
+    runtime: claude-skill
+    path: claude/skills/webkit-vercel-deploy
+    activation: core
+    effort_default: high
+    triggers: ["Vercel deploy"]
+
+  - id: webkit-vercel-react-best-practices
+    domain: coding
+    runtime: claude-skill
+    path: claude/skills/webkit-vercel-react-best-practices
+    activation: core
+    effort_default: high
+    triggers: ["React best practices", "Next.js"]
+
+# ---------------------------------------------------------------------------
+# Cursor official skills (skills-cursor) — core product tooling
+# ---------------------------------------------------------------------------
+  - id: review-security
+    domain: security
+    runtime: cursor-skill
+    path: cursor/skills/review-security
+    activation: core
+    effort_default: high
+    triggers: ["/review-security"]
+
+  - id: review-bugbot
+    domain: coding
+    runtime: cursor-skill
+    path: cursor/skills/review-bugbot
+    activation: core
+    effort_default: high
+    triggers: ["/review-bugbot"]
+
+  - id: create-skill
+    domain: general
+    runtime: cursor-skill
+    path: cursor/skills/create-skill
+    activation: on-demand
+    effort_default: low
+    triggers: ["create skill"]
+
+  - id: create-rule
+    domain: general
+    runtime: cursor-skill
+    path: cursor/skills/create-rule
+    activation: on-demand
+    effort_default: low
+    triggers: ["create rule"]
+
+  - id: create-subagent
+    domain: agentic
+    runtime: cursor-skill
+    path: cursor/skills/create-subagent
+    activation: on-demand
+    effort_default: low
+    triggers: ["create subagent"]
+
+  - id: canvas
+    domain: general
+    runtime: cursor-skill
+    path: cursor/skills/canvas
+    activation: on-demand
+    effort_default: high
+    triggers: ["canvas", "analytical artifact"]
+
+# ---------------------------------------------------------------------------
+# Deprecated aliases (do not activate; redirect to canonical)
+# ---------------------------------------------------------------------------
+deprecated:
+  - id: cyber-web-security
+    use: 09-web-security
+    reason: "Duplicate of numbered Masriyan skill"
+  - id: cyber-blue-team-defense
+    use: 15-blue-team-defense
+    reason: "Duplicate of numbered Masriyan skill"
+  - id: cyber-ai-llm-security
+    use: 16-ai-llm-security
+    reason: "Duplicate of numbered Masriyan skill"
+  - id: cyber-grc-compliance
+    use: 19-grc-compliance
+    reason: "Duplicate of numbered Masriyan skill"
+  - id: openrouter-kimi-k3-byok
+    use: null
+    reason: "Out of scope — Cursor provides native Kimi K3; do not expand BYOK scripts"
+
+# ---------------------------------------------------------------------------
+# 9 teachers (paper MOPD): 3 families × 3 efforts
+# Fine domains map into teacher_family; router picks matrix cell then domain_routings
+# ---------------------------------------------------------------------------
+teacher_family_map:
+  general: general
+  research: general
+  agentic: agentic
+  design: agentic
+  coding: coding
+  security: coding
+  infra: coding
+  trading: coding
+
+teacher_matrix:
+  general:
+    low: [docs-writer, researcher]
+    high: [researcher, docs-writer, canvas]
+    max: [deep-researcher, researcher, dossier-investigator, memory-specialist]
+  agentic:
+    low: [workflow-specialist]
+    high: [k3-cognitive-router-agent, goal-planner, workflow-specialist, browser-agent]
+    max: [k3-cognitive-router-agent, coordinator, goal-planner, horizon-tracker, browser-agent]
+  coding:
+    low: [coder, git-specialist]
+    high: [coder, tester, reviewer, architect]
+    max: [coder, tester, reviewer, security-auditor, safety-specialist]
+
+# ---------------------------------------------------------------------------
+# Domain → preferred Top-k agent sets (augment teacher_matrix)
+# ---------------------------------------------------------------------------
+domain_routings:
+  coding:
+    preferred:
+      - coder
+      - tester
+      - reviewer
+      - architect
+      - git-specialist
+    workflows:
+      - sparc-orchestrator  # when effort >= high and task is a feature
+  agentic:
+    preferred:
+      - k3-cognitive-router-agent
+      - coordinator
+      - goal-planner
+      - workflow-specialist
+      - browser-agent
+  security:
+    preferred:
+      - security-auditor
+      - safety-specialist
+      - owasp-security
+      - security-audit
+      - 09-web-security
+      - review-security
+  research:
+    preferred:
+      - deep-researcher
+      - researcher
+      - dossier-investigator
+      - memory-specialist
+  design:
+    preferred:
+      - webkit-frontend-design
+      - webkit-shadcn-ui
+      - browser-agent
+  infra:
+    preferred:
+      - deployment-expert
+      - performance-optimizer
+      - migration-engineer
+      - observability-engineer
+  trading:
+    preferred:
+      - trading-strategist
+      - market-analyst
+      - risk-analyst
+      - backtest-engineer
+  general:
+    preferred:
+      - docs-writer
+      - researcher
+      - canvas
+
+# Profile taxonomy (Claude) aligned with K3 domains
+profiles:
+  baseline:
+    k3_domain: general
+    default_effort: low
+  coder:
+    k3_domain: coding
+    default_effort: high
+  web:
+    k3_domain: design
+    default_effort: high
+  security:
+    k3_domain: security
+    default_effort: max
+  research:
+    k3_domain: research
+    default_effort: max
+  devops:
+    k3_domain: infra
+    default_effort: high
+  trading:
+    k3_domain: trading
+    default_effort: high
+  iot:
+    k3_domain: infra
+    default_effort: high
+  autonomous:
+    k3_domain: agentic
+    default_effort: max
+  mega:
+    k3_domain: research
+    default_effort: max
+    notes: "Wide catalog — router must still Top-k; never activate entire mega set"

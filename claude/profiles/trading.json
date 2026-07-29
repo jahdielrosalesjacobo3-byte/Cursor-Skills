@@ -6,5 +6,8 @@
     "file-search@netresearch-claude-code-marketplace",
     "ruflo-market-data@ruflo",
     "ruflo-neural-trader@ruflo"
-  ]
+  ],
+  "k3_domain": "trading",
+  "default_effort": "high",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }

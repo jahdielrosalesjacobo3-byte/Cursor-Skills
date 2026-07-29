@@ -16,5 +16,8 @@
     "ruflo-testgen@ruflo",
     "antigravity-bundle-essentials@antigravity-awesome-skills",
     "antigravity-bundle-agent-architect@antigravity-awesome-skills"
-  ]
+  ],
+  "k3_domain": "agentic",
+  "default_effort": "max",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }

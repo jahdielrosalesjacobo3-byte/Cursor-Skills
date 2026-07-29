@@ -28,33 +28,80 @@
       "id": "antigravity_catalog_only_mega",
       "summary": "El catálogo completo solo puede estar activo en perfil mega.",
       "unless_profile": "mega",
-      "force_disable": ["antigravity-awesome-skills@antigravity-awesome-skills"]
+      "force_disable": [
+        "antigravity-awesome-skills@antigravity-awesome-skills"
+      ]
     },
     {
       "id": "ruflo_core_hooks_cursor",
       "summary": "ruflo-core instala hooks modify-bash/modify-file que rompen Cursor. Desactivado salvo mega + ALLOW_RUFLO_CORE=1.",
       "unless_profile": "mega",
-      "force_disable": ["ruflo-core@ruflo"]
+      "force_disable": [
+        "ruflo-core@ruflo"
+      ]
     },
     {
       "id": "ruflo_core_mega_optional",
       "summary": "En mega, ruflo-core solo si export ALLOW_RUFLO_CORE=1 (Claude Code CLI, no Cursor).",
       "if_profile": "mega",
       "unless_env": "ALLOW_RUFLO_CORE=1",
-      "force_disable": ["ruflo-core@ruflo"]
+      "force_disable": [
+        "ruflo-core@ruflo"
+      ]
     }
   ],
   "profile_skill_budget": {
-    "baseline": { "plugins": 3, "skills_approx": 16, "antigravity": "ninguno" },
-    "coder": { "plugins": 10, "skills_approx": 45, "antigravity": "essentials + full-stack" },
-    "autonomous": { "plugins": 15, "skills_approx": 52, "antigravity": "essentials + agent-architect" },
-    "web": { "plugins": 8, "skills_approx": 48, "antigravity": "essentials + web-wizard" },
-    "security": { "plugins": 9, "skills_approx": 42, "antigravity": "essentials + security-engineer" },
-    "research": { "plugins": 11, "skills_approx": 55, "antigravity": "essentials + agent-architect" },
-    "devops": { "plugins": 12, "skills_approx": 50, "antigravity": "essentials + devops-cloud" },
-    "trading": { "plugins": 6, "skills_approx": 25, "antigravity": "ninguno" },
-    "iot": { "plugins": 10, "skills_approx": 40, "antigravity": "solo essentials" },
-    "mega": { "plugins": 38, "skills_approx": 1500, "antigravity": "solo catalogo completo", "warning": "trigger impreciso" }
+    "baseline": {
+      "plugins": 3,
+      "skills_approx": 16,
+      "antigravity": "ninguno"
+    },
+    "coder": {
+      "plugins": 10,
+      "skills_approx": 45,
+      "antigravity": "essentials + full-stack"
+    },
+    "autonomous": {
+      "plugins": 15,
+      "skills_approx": 52,
+      "antigravity": "essentials + agent-architect"
+    },
+    "web": {
+      "plugins": 8,
+      "skills_approx": 48,
+      "antigravity": "essentials + web-wizard"
+    },
+    "security": {
+      "plugins": 9,
+      "skills_approx": 42,
+      "antigravity": "essentials + security-engineer"
+    },
+    "research": {
+      "plugins": 11,
+      "skills_approx": 55,
+      "antigravity": "essentials + agent-architect"
+    },
+    "devops": {
+      "plugins": 12,
+      "skills_approx": 50,
+      "antigravity": "essentials + devops-cloud"
+    },
+    "trading": {
+      "plugins": 6,
+      "skills_approx": 25,
+      "antigravity": "ninguno"
+    },
+    "iot": {
+      "plugins": 10,
+      "skills_approx": 40,
+      "antigravity": "solo essentials"
+    },
+    "mega": {
+      "plugins": 38,
+      "skills_approx": 1500,
+      "antigravity": "solo catalogo completo",
+      "warning": "trigger impreciso"
+    }
   },
   "mode_skill_overlay": {
     "ccode_normal": "respeta perfil activo",
@@ -64,5 +111,6 @@
     "cc_max": "fuerza perfil autonomous + effort max",
     "cc_yolo": "respeta perfil del router; bypass permisos",
     "cc_mega": "alias claude-profile use mega"
-  }
+  },
+  "k3_routing": "Always Top-k via expert-registry; never activate full antigravity catalog"
 }

@@ -1,0 +1,126 @@
+# Harness profiles — white-box agent modules (K3 §4.2.1)
+
+Composable modules: tools, system posture, context strategy, skills, memory, subagents.
+Pick one profile per task via the cognitive router; do not lock forever to a single harness habit.
+
+version: 1
+updated: "2026-07-29"
+
+defaults:
+  shared_modules:
+    - security-scanning
+    - semgrep-hooks
+  max_subagents: 16
+  context_strategy: attnres_selective
+  preserved_thinking: true
+  snyk_code: disabled
+  topical_locks: false
+  posture: full-spectrum-capable
+
+profiles:
+  full-spectrum:
+    teacher_family: mixed
+    default_effort: max
+    tools: [shell, browser, mcp, read, write, grep, search, web]
+    skills: [k3-cognitive-router]
+    memory: orchestrator-state
+    context_strategy: attnres_selective
+    subagents_policy: any-relevant-up-to-16
+    cross_family: true
+    grm_judge: optional
+    partial_rollout: true
+    topical_locks: false
+    notes: "Maximum stack exploitation — any topic; wave experts; no domain veto"
+
+  general-light:
+    teacher_family: general
+    default_effort: low
+    tools: [search, read]
+    skills: [docs-writer, canvas]
+    memory: none
+    context_strategy: minimal
+    subagents: []
+    notes: "Short Q&A and light docs"
+
+  research-deep:
+    teacher_family: general
+    default_effort: max
+    tools: [search, web, read, write]
+    skills: [deep-researcher, researcher, dossier-investigator, memory-specialist]
+    memory: scratchpad+checkpoints
+    context_strategy: attnres_selective
+    subagents: [deep-researcher, dossier-investigator]
+    compaction_hint: "Summarize sources into phase_artifacts.evidence; keep attnres_keys short"
+
+  agentic-long:
+    teacher_family: agentic
+    default_effort: high
+    tools: [shell, browser, mcp, read, write]
+    skills: [k3-cognitive-router, goal-planner, workflow-specialist, browser-agent]
+    memory: orchestrator-state
+    context_strategy: compact_at_300k_metaphor
+    subagents: [coordinator, goal-planner, browser-agent]
+    partial_rollout: true
+    notes: "Long-horizon assistant / multi-tool; resume paused_rollouts first"
+
+  coding-default:
+    teacher_family: coding
+    default_effort: high
+    tools: [shell, read, write, grep, mcp]
+    skills: [coder, tester, reviewer, git-specialist]
+    memory: scratchpad
+    context_strategy: attnres_selective
+    subagents: [coder, tester, reviewer]
+    workflows:
+      feature_lifecycle: sparc-orchestrator
+    notes: "Default software work; SPARC only for full features"
+
+  security-max:
+    teacher_family: coding
+    default_effort: max
+    tools: [shell, read, grep, mcp-semgrep]
+    skills: [security-auditor, safety-specialist, owasp-security, security-audit, review-security, 09-web-security]
+    memory: orchestrator-state
+    context_strategy: attnres_selective
+    subagents: [security-auditor, safety-specialist, reviewer]
+    grm_judge: required
+    snyk_code: disabled
+    sast: semgrep
+    notes: "Audits/IR; Semgrep primary; no Snyk Code"
+
+  design-ui:
+    teacher_family: agentic
+    default_effort: high
+    tools: [read, write, browser, mcp-figma]
+    skills: [webkit-frontend-design, webkit-shadcn-ui, browser-agent]
+    memory: scratchpad
+    context_strategy: attnres_selective
+    subagents: [browser-agent]
+    notes: "Frontend / UI implementation"
+
+  infra-deploy:
+    teacher_family: coding
+    default_effort: high
+    tools: [shell, read, write, mcp]
+    skills: [deployment-expert, performance-optimizer, migration-engineer, observability-engineer]
+    memory: scratchpad
+    context_strategy: attnres_selective
+    subagents: [deployment-expert, performance-optimizer]
+    notes: "Deploy, perf, migrations"
+
+# Domain → default profile
+domain_defaults:
+  general: general-light
+  research: research-deep
+  agentic: agentic-long
+  design: design-ui
+  coding: coding-default
+  security: security-max
+  infra: infra-deploy
+  trading: coding-default
+  "*": full-spectrum
+user_override:
+  phrases: ["libertad total", "máximo provecho", "full-spectrum", "sin restricciones de dominio", "usa todo el stack"]
+  force_profile: full-spectrum
+  max_subagents: 16
+  effort: max

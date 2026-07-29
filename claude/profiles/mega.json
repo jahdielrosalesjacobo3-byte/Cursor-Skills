@@ -40,5 +40,8 @@
     "ruflo-ruvector@ruflo",
     "ruflo-sparc@ruflo"
   ],
-  "_note_ruflo_core": "ruflo-core NO listado: hooks rompen Cursor. Solo con export ALLOW_RUFLO_CORE=1 si usas Claude Code CLI."
+  "_note_ruflo_core": "ruflo-core NO listado: hooks rompen Cursor. Solo con export ALLOW_RUFLO_CORE=1 si usas Claude Code CLI.",
+  "k3_domain": "research",
+  "default_effort": "max",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }

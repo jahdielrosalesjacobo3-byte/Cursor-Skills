@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://securecorp.local/schemas/k3-orchestrator-state.json",
+  "title": "K3OrchestratorState",
+  "type": "object",
+  "required": [
+    "task_id",
+    "domain",
+    "effort",
+    "teacher_family",
+    "active_experts",
+    "shared_experts",
+    "thinking_scratchpad",
+    "raova_phase"
+  ],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "general",
+        "agentic",
+        "coding",
+        "security",
+        "design",
+        "infra",
+        "trading",
+        "research"
+      ]
+    },
+    "effort": { "type": "string", "enum": ["low", "high", "max"] },
+    "teacher_family": {
+      "type": "string",
+      "enum": ["general", "agentic", "coding"],
+      "description": "MOPD teacher family (paper's 3 RL domains)"
+    },
+    "harness_profile": { "type": "string" },
+    "goal": { "type": "string" },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "tau": { "type": "number", "description": "Effort budget multiplier vs b0" },
+        "b0_hint": { "type": "string", "description": "Qualitative cold-start budget estimate" },
+        "verbosity_sigma": { "type": "number" }
+      }
+    },
+    "raova_phase": {
+      "type": "string",
+      "enum": ["reason", "act", "observe", "verify", "adapt"]
+    },
+    "active_experts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 16
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["efficient", "full-spectrum"],
+      "description": "full-spectrum = no topical locks; Top-k up to 16"
+    },
+    "shared_experts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": ["security-scanning", "semgrep-hooks"]
+    },
+    "expert_usage": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" },
+      "description": "Quantile balancing: count of recent uses per expert id"
+    },
+    "thinking_scratchpad": { "type": "string" },
+    "phase_artifacts": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "May include rubric, scorepad, plan, diff_summary, etc."
+    },
+    "attnres_keys": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "paused_rollouts": {
+      "type": "array",
+      "description": "Partial-rollout incomplete trajectories to resume first next turn",
+      "items": {
+        "type": "object",
+        "required": ["id", "summary", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "summary": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["paused", "ready", "done", "failed"]
+          },
+          "resume_hint": { "type": "string" },
+          "experts": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["at", "summary"],
+        "properties": {
+          "at": { "type": "string" },
+          "summary": { "type": "string" },
+          "raova_phase": { "type": "string" },
+          "experts": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "sparc_phase": {
+      "type": ["string", "null"],
+      "enum": [null, "specification", "pseudocode", "architecture", "refinement", "completion"]
+    }
+  },
+  "additionalProperties": true
+}

@@ -12,15 +12,55 @@ mkdir -p "$HOME/.cursor"
 cp "$ROOT/cursor/mcp.json" "$HOME/.cursor/mcp.json"
 cp "$ROOT/cursor/hooks.json" "$HOME/.cursor/hooks.json"
 
-echo "==> Installing Cursor skills (agents/subagents entrypoints)..."
+echo "==> Installing Cursor rules (K3 cognitive + security-scanning)..."
+mkdir -p "$HOME/.cursor/rules"
+if [ -d "$ROOT/cursor/rules" ]; then
+  rsync -a "$ROOT/cursor/rules/" "$HOME/.cursor/rules/"
+  echo "    Rules: $(ls "$HOME/.cursor/rules"/*.mdc 2>/dev/null | wc -l | tr -d ' ')"
+fi
+
+echo "==> Installing K3 harness profiles + registry pointers..."
+mkdir -p "$HOME/.cursor/secureskills"
+cp "$ROOT/harness-profiles.yaml" "$HOME/.cursor/secureskills/harness-profiles.yaml"
+cp "$ROOT/expert-registry.yaml" "$HOME/.cursor/secureskills/expert-registry.yaml"
+cp "$ROOT/AGENTS.md" "$HOME/.cursor/secureskills/AGENTS.md"
+echo "    OK: ~/.cursor/secureskills/{harness-profiles,expert-registry,AGENTS}"
+
+echo "==> Installing Cursor skills (agents/subagents entrypoints → skills-cursor)..."
 mkdir -p "$HOME/.cursor/skills-cursor"
 rsync -a "$ROOT/cursor/skills/" "$HOME/.cursor/skills-cursor/"
+
+echo "==> Installing Cursor user skills (k3-cognitive-router + cyber 01–19)..."
+mkdir -p "$HOME/.cursor/skills"
+# K3 cognitive router (do not place under skills-cursor — Cursor-managed)
+if [ -d "$ROOT/cursor/user-skills/k3-cognitive-router" ]; then
+  rsync -a --delete \
+    "$ROOT/cursor/user-skills/k3-cognitive-router/" \
+    "$HOME/.cursor/skills/k3-cognitive-router/"
+  echo "    OK: k3-cognitive-router"
+fi
+# Canonical cyber 01–19 as symlinks into user skills (same content as Claude skills)
+if [ -d "$ROOT/claude/skills" ]; then
+  for skill_dir in "$ROOT/claude/skills"/[0-9][0-9]-*; do
+    [ -d "$skill_dir" ] || continue
+    name="$(basename "$skill_dir")"
+    ln -sfn "$skill_dir" "$HOME/.cursor/skills/$name"
+  done
+  echo "    Linked cyber 01–19 into ~/.cursor/skills/"
+fi
+# Remove deprecated cyber-* aliases from Cursor user skills if present
+for alias in cyber-web-security cyber-blue-team-defense cyber-ai-llm-security cyber-grc-compliance; do
+  if [ -e "$HOME/.cursor/skills/$alias" ] || [ -L "$HOME/.cursor/skills/$alias" ]; then
+    rm -rf "$HOME/.cursor/skills/$alias"
+    echo "    Removed deprecated alias: ~/.cursor/skills/$alias"
+  fi
+done
 
 echo "==> Installing Cursor agents (Task subagents)..."
 if [ -d "$ROOT/cursor/agents" ] && [ "$(ls -A "$ROOT/cursor/agents" 2>/dev/null)" ]; then
   mkdir -p "$HOME/.cursor/agents"
   rsync -a "$ROOT/cursor/agents/" "$HOME/.cursor/agents/"
-  echo "    Agents: $(ls "$HOME/.cursor/agents" | wc -l | tr -d ' ')"
+  echo "    Agents: $(ls "$HOME/.cursor/agents"/*.md 2>/dev/null | wc -l | tr -d ' ')"
 fi
 
 echo "==> Installing Claude profiles..."
@@ -30,6 +70,23 @@ rsync -a "$ROOT/claude/profiles/" "$HOME/.claude/profiles/"
 echo "==> Installing Claude skills..."
 mkdir -p "$HOME/.claude/skills"
 rsync -a "$ROOT/claude/skills/" "$HOME/.claude/skills/"
+# Remove deprecated cyber-* duplicates if they exist as separate trees after rsync
+for alias in cyber-web-security cyber-blue-team-defense cyber-ai-llm-security cyber-grc-compliance; do
+  if [ -e "$HOME/.claude/skills/$alias" ]; then
+    # Keep only if not already covered: replace with symlink to numbered canonical when possible
+    case "$alias" in
+      cyber-web-security) target="09-web-security" ;;
+      cyber-blue-team-defense) target="15-blue-team-defense" ;;
+      cyber-ai-llm-security) target="16-ai-llm-security" ;;
+      cyber-grc-compliance) target="19-grc-compliance" ;;
+    esac
+    if [ -n "${target:-}" ] && [ -d "$HOME/.claude/skills/$target" ]; then
+      rm -rf "$HOME/.claude/skills/$alias"
+      ln -sfn "$HOME/.claude/skills/$target" "$HOME/.claude/skills/$alias"
+      echo "    Alias $alias -> $target (symlink)"
+    fi
+  fi
+done
 
 echo "==> Installing Codex skills (if present)..."
 if [ -d "$ROOT/codex/skills" ] && [ "$(ls -A "$ROOT/codex/skills" 2>/dev/null)" ]; then
@@ -61,7 +118,8 @@ if [ "${SECURESKILLS_SEED_PROJECT:-}" = "1" ] && [ -d "$ROOT/templates/project/.
 fi
 
 echo ""
-echo "==> Plugins restored. See plugins-manifest.json for full inventory."
+echo "==> Plugins restored. See plugins-manifest.json / expert-registry.yaml."
 echo "==> Done. Restart Cursor and Claude Code."
 echo "    Run: snyk auth  (if using Snyk MCP)"
+echo "    Audit: bash scripts/audit-ecosystem.sh"
 echo "    Optional: SECURESKILLS_SEED_PROJECT=1 bash scripts/install-to-local.sh"

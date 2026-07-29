@@ -12,5 +12,8 @@
     "ruflo-federation@ruflo",
     "antigravity-bundle-essentials@antigravity-awesome-skills",
     "antigravity-bundle-devops-cloud@antigravity-awesome-skills"
-  ]
+  ],
+  "k3_domain": "infra",
+  "default_effort": "high",
+  "_k3_note": "Aligned with SecureSkills expert-registry.yaml / K3 cognitive router"
 }
