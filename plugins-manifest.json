@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "exportedAt": "2026-07-30T11:26:12",
+  "exportedAt": "2026-07-30T11:40:42",
   "claude": {
     "installed": [
       "agent-browser@agent-browser",
@@ -145,7 +145,6 @@
       "create-rule",
       "create-skill",
       "create-subagent",
-      "env-setup",
       "loop",
       "migrate-to-skills",
       "onboard",
@@ -159,7 +158,7 @@
       "update-cli-config",
       "update-cursor-settings"
     ],
-    "skillsCount": 20,
+    "skillsCount": 19,
     "agents": [
       "adr-architect",
       "agentdb-specialist",
@@ -233,7 +232,7 @@
   "integrations": {
     "catalog": "integrations/catalog.json",
     "core": "integrations/core.yaml",
-    "generatedAt": "2026-07-30T17:20:23Z",
+    "generatedAt": "2026-07-30T17:40:42Z",
     "counts": {
       "mcp": 2,
       "hooks": 4,

@@ -1,6 +1,6 @@
 # Integrations catalog
 
-Generated `2026-07-30T17:34:43Z` by `scripts/build-integrations-catalog.sh`.
+Generated `2026-07-30T17:40:42Z` by `scripts/build-integrations-catalog.sh`.
 Regenerate after installing/removing plugins; verify with `scripts/verify-integrations.sh`.
 
 ## Two-level routing

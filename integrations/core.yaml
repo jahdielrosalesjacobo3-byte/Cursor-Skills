@@ -2,7 +2,7 @@
 # Source of truth: scripts/build-integrations-catalog.sh
 # Do not hand-edit; regenerate after changing MCP/hooks/rules/agents/skills.
 version: 1
-generated_at: "2026-07-30T17:34:43Z"
+generated_at: "2026-07-30T17:40:42Z"
 
 mcp:
   - id: "mcp:semgrep"
