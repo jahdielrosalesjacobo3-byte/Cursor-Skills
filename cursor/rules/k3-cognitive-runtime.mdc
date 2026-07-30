@@ -58,6 +58,14 @@ Cadence default 3:1; in full-spectrum, stretch Act batches if the task needs it.
 - Quantile balancing: optional diversity, not a ban on reusing a strong specialist
 - Still avoid activating the entire antigravity/mega catalog in one shot (context collapse) — fan out in waves if needed
 
+## 3b. Two-level catalog (L1 → L2)
+
+- **L1** — `expert-registry.yaml` + `~/.cursor/secureskills/integrations/core.yaml`: curated experts, MCP, hooks, rules, agents, canonical skills. Always eligible.
+- **L2** — `~/.cursor/secureskills/integrations/shards/*.jsonl` (~5k marketplace plugin skills), indexed by `catalog.json`. Reach for it only when L1 has no match or the user names a skill/marketplace.
+- Search L2 with `grep` on the shards (one JSON object per line), open the single matching `SKILL.md`, and count it against Top-k. Max 4 L2 activations per task.
+- Never read a whole shard or paste catalog contents into a reply.
+- Harness profiles carry `catalog_access`: `l2_on_demand` or `none`.
+
 ## 4–5. Preserved thinking + AttnRes
 
 Keep scratchpad / `.k3/` on long or `max` work. Selective recall for efficiency — not to hide information from the user.

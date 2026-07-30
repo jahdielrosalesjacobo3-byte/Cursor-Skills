@@ -12,6 +12,7 @@ Compatible con **Cursor Agent**, **Claude Code** y **Codex**.
 | [`expert-registry.yaml`](expert-registry.yaml) | Catálogo + `teacher_matrix` 3×3 |
 | [`harness-profiles.yaml`](harness-profiles.yaml) | Kits white-box incl. `full-spectrum` |
 | [`ecosystem-map.md`](ecosystem-map.md) | Mapa de hubs + dedup |
+| [`integrations/INDEX.md`](integrations/INDEX.md) | Catálogo de dos niveles (L1 core / L2 on-demand) |
 | [`docs/k3-smoke-tests.md`](docs/k3-smoke-tests.md) | Smoke tests post-install |
 | [`docs/registry-checklist.md`](docs/registry-checklist.md) | Checklist pre-commit |
 | [`docs/smoke-results/`](docs/smoke-results/) | Resultados de verificación |
@@ -24,10 +25,11 @@ Inventario (ver también [`plugins-manifest.json`](plugins-manifest.json)):
 | Cursor user skills | `k3-cognitive-router` (+ cyber 01–19 vía install) |
 | Cursor agents / subagents | 49 (48 ruflo + `k3-cognitive-router`) |
 | Cursor rules | `k3-cognitive-runtime` + `security-scanning` |
-| Cursor plugins | 11 |
+| Cursor plugins | 32 |
 | Cursor MCPs | Snyk + Semgrep |
 | Claude plugins | 44 |
 | Claude skills | 01–19 canónicos; `cyber-*` → symlinks |
+| Skills de marketplace indexados (L2) | 5 078 en 15 shards |
 
 ## Instalación rápida (equipo)
 
@@ -36,6 +38,7 @@ git clone https://github.com/SecureCorp-Mexico/SecureSkills.git
 cd SecureSkills
 bash scripts/install-to-local.sh
 bash scripts/audit-ecosystem.sh
+bash scripts/verify-integrations.sh
 ```
 
 Esto restaura en tu máquina:
@@ -43,6 +46,7 @@ Esto restaura en tu máquina:
 - `~/.cursor/rules/` — K3 full-spectrum + security-scanning (advisory en código)
 - `~/.cursor/skills/k3-cognitive-router/` — orquestador cognitivo
 - `~/.cursor/secureskills/` — registry, harness profiles, AGENTS.md
+- `~/.cursor/secureskills/integrations/` — catálogo L2 (`catalog.json` + shards)
 - `~/.cursor/skills-cursor/` — skills oficiales Cursor
 - `~/.cursor/agents/` — Task subagents (incl. k3-cognitive-router)
 - `~/.cursor/mcp.json` + `hooks.json` — Snyk/Semgrep + Semgrep Guardian
@@ -78,6 +82,24 @@ No configura OpenRouter/BYOK. Enseña a los agentes a **amplificar** el stack:
 Triggers de full-spectrum (ver `harness-profiles.yaml` → `user_override`):  
 `libertad total`, `máximo provecho`, `full-spectrum`, `usa todo el stack`, …
 
+## Catálogo de integraciones (dos niveles)
+
+Miles de skills de marketplace quedan **alcanzables sin entrar al contexto**:
+
+| Nivel | Dónde | Qué contiene | Cuándo se usa |
+|-------|-------|--------------|---------------|
+| **L1** | `expert-registry.yaml` + [`integrations/core.yaml`](integrations/core.yaml) | MCP, hooks, rules, 49 agents, skills canónicos, profiles | Siempre elegible (Top-k) |
+| **L2** | [`integrations/shards/*.jsonl`](integrations/) vía [`catalog.json`](integrations/catalog.json) | 5 078 skills de plugins Cursor + Claude | Solo si L1 no cubre, o si el usuario nombra la skill |
+
+El router busca en L2 con `grep` sobre JSON Lines, abre **una** `SKILL.md` a la vez
+(máx. 4 por tarea) y nunca vuelca un shard completo. Detalle del protocolo en
+[`catalog-l2.md`](cursor/user-skills/k3-cognitive-router/references/catalog-l2.md).
+
+```bash
+bash scripts/build-integrations-catalog.sh   # reescanea el disco
+bash scripts/verify-integrations.sh          # salud CLIs/MCP/hooks/K3 + drift
+```
+
 ## Estructura
 
 ```
@@ -91,6 +113,7 @@ SecureSkills/
 │   ├── registry-checklist.md
 │   └── smoke-results/
 ├── fixtures/k3-smoke/          # util + tests de verificación
+├── integrations/               # L1 core.yaml + L2 shards JSONL (generado)
 ├── cursor/
 │   ├── mcp.json / hooks.json
 │   ├── rules/                  # K3 + security-scanning
@@ -109,6 +132,9 @@ SecureSkills/
 │   ├── install-to-local.sh
 │   ├── export-from-local.sh
 │   ├── audit-ecosystem.sh
+│   ├── build-integrations-catalog.sh
+│   ├── verify-integrations.sh
+│   ├── lib/                    # build_catalog.py, build_manifest.py
 │   └── setup-security-stack.sh
 └── .github/workflows/
 ```
@@ -164,8 +190,9 @@ Cada perfil incluye `k3_domain` + `default_effort` alineados al registry.
 
 ```bash
 cd SecureSkills
-bash scripts/export-from-local.sh   # re-export desde la máquina
-bash scripts/audit-ecosystem.sh
+bash scripts/export-from-local.sh   # re-export + regenera catálogo y manifest
+bash scripts/audit-ecosystem.sh     # consistencia repo ↔ instalación
+bash scripts/verify-integrations.sh # salud de CLIs, MCP, hooks, K3 y drift
 git status
 ```
 

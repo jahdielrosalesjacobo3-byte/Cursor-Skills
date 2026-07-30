@@ -26,6 +26,14 @@ cp "$ROOT/expert-registry.yaml" "$HOME/.cursor/secureskills/expert-registry.yaml
 cp "$ROOT/AGENTS.md" "$HOME/.cursor/secureskills/AGENTS.md"
 echo "    OK: ~/.cursor/secureskills/{harness-profiles,expert-registry,AGENTS}"
 
+echo "==> Installing L2 integrations catalog..."
+if [ -d "$ROOT/integrations" ]; then
+  rsync -a --delete "$ROOT/integrations/" "$HOME/.cursor/secureskills/integrations/"
+  echo "    Shards: $(ls "$HOME/.cursor/secureskills/integrations/shards"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')"
+else
+  echo "    SKIP: integrations/ absent — run scripts/build-integrations-catalog.sh"
+fi
+
 echo "==> Installing Cursor skills (agents/subagents entrypoints → skills-cursor)..."
 mkdir -p "$HOME/.cursor/skills-cursor"
 rsync -a "$ROOT/cursor/skills/" "$HOME/.cursor/skills-cursor/"
@@ -121,5 +129,6 @@ echo ""
 echo "==> Plugins restored. See plugins-manifest.json / expert-registry.yaml."
 echo "==> Done. Restart Cursor and Claude Code."
 echo "    Run: snyk auth  (if using Snyk MCP)"
-echo "    Audit: bash scripts/audit-ecosystem.sh"
+echo "    Audit:  bash scripts/audit-ecosystem.sh"
+echo "    Health: bash scripts/verify-integrations.sh"
 echo "    Optional: SECURESKILLS_SEED_PROJECT=1 bash scripts/install-to-local.sh"

@@ -85,86 +85,12 @@ if [ -d "$HOME/.codex/skills" ]; then
   rsync -aL --delete --exclude='.git' "$HOME/.codex/skills/" "$ROOT/codex/skills/"
 fi
 
+# --- L2 integrations catalog (must run before the manifest, which reads it) ---
+echo "==> Rebuilding integrations catalog..."
+bash "$ROOT/scripts/build-integrations-catalog.sh"
+
 # --- Manifest ---
-python3 - "$ROOT" <<'PY'
-import json, sys
-from pathlib import Path
-
-repo = Path(sys.argv[1])
-home = Path.home()
-manifest = {
-    "version": 2,
-    "exportedAt": __import__("datetime").datetime.now().isoformat(timespec="seconds"),
-    "claude": {},
-    "cursor": {},
-}
-
-ip = home / ".claude/plugins/installed_plugins.json"
-if ip.exists():
-    data = json.loads(ip.read_text())
-    manifest["claude"]["installed"] = sorted(data.get("plugins", {}).keys())
-    manifest["claude"]["count"] = len(manifest["claude"]["installed"])
-km = home / ".claude/plugins/known_marketplaces.json"
-if km.exists():
-    manifest["claude"]["marketplaces"] = sorted(json.loads(km.read_text()).keys())
-
-skills_dir = repo / "claude" / "skills"
-if skills_dir.exists():
-    claude_skills = sorted([p.name for p in skills_dir.iterdir() if p.is_dir()])
-    manifest["claude"]["skills"] = claude_skills
-    manifest["claude"]["skillsCount"] = len(claude_skills)
-
-cache = home / ".cursor/plugins/cache"
-cursor_plugins = []
-if cache.exists():
-    for mp in sorted(cache.iterdir()):
-        if not mp.is_dir():
-            continue
-        for plugin in sorted(mp.iterdir()):
-            if not plugin.is_dir():
-                continue
-            for ver in sorted(plugin.iterdir()):
-                if ver.is_dir():
-                    cursor_plugins.append(f"{plugin.name}@{mp.name} ({ver.name})")
-manifest["cursor"]["installed"] = cursor_plugins
-manifest["cursor"]["count"] = len(cursor_plugins)
-
-cursor_skills = sorted(
-    [p.name for p in (repo / "cursor" / "skills").iterdir() if p.is_dir()]
-) if (repo / "cursor" / "skills").exists() else []
-manifest["cursor"]["skills"] = cursor_skills
-manifest["cursor"]["skillsCount"] = len(cursor_skills)
-
-agents_dir = repo / "cursor" / "agents"
-agents = sorted([p.stem for p in agents_dir.glob("*.md")]) if agents_dir.exists() else []
-manifest["cursor"]["agents"] = agents
-manifest["cursor"]["agentsCount"] = len(agents)
-
-rules_dir = repo / "cursor" / "rules"
-rules = sorted([p.name for p in rules_dir.glob("*.mdc")]) if rules_dir.exists() else []
-manifest["cursor"]["rules"] = rules
-user_skills = []
-us = repo / "cursor" / "user-skills"
-if us.exists():
-    user_skills = sorted([p.name for p in us.iterdir() if p.is_dir()])
-manifest["cursor"]["userSkills"] = user_skills
-manifest["k3"] = {"registry": "expert-registry.yaml", "cognitive": True}
-
-mcp = repo / "cursor" / "mcp.json"
-if mcp.exists():
-    servers = sorted(json.loads(mcp.read_text()).get("mcpServers", {}).keys())
-    manifest["cursor"]["mcpServers"] = servers
-
-(repo / "plugins-manifest.json").write_text(
-    json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
-)
-print(
-    f"Wrote plugins-manifest.json — Claude plugins={manifest['claude'].get('count', 0)} "
-    f"skills={manifest['claude'].get('skillsCount', 0)}; "
-    f"Cursor plugins={manifest['cursor'].get('count', 0)} "
-    f"skills={manifest['cursor'].get('skillsCount', 0)} "
-    f"agents={manifest['cursor'].get('agentsCount', 0)}"
-)
-PY
+python3 "$ROOT/scripts/lib/build_manifest.py" "$ROOT"
 
 echo "==> Export complete. Review with: git status"
+echo "    Health check: bash scripts/verify-integrations.sh"

@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "exportedAt": "2026-07-28T10:39:49",
+  "version": 3,
+  "exportedAt": "2026-07-30T11:26:12",
   "claude": {
     "installed": [
       "agent-browser@agent-browser",
@@ -104,18 +104,39 @@
   "cursor": {
     "installed": [
       "agent-browser@agent-browser (82eadcee41240b1c8477870f846bc8528e77a8a6)",
+      "agentic-awesome-skills@agentic-awesome-skills (ab5f6c205a548d2f4bec411728c79b9c156fc696)",
+      "agentic-bundle-aas-accessibility-inclusive-ux@agentic-awesome-skills (ab5f6c205a548d2f4bec411728c79b9c156fc696)",
+      "agentic-bundle-aas-agent-mcp-builder@agentic-awesome-skills (ab5f6c205a548d2f4bec411728c79b9c156fc696)",
+      "agentic-bundle-aas-ai-product-evaluation-ops@agentic-awesome-skills (ab5f6c205a548d2f4bec411728c79b9c156fc696)",
       "antigravity-awesome-skills@antigravity-awesome-skills (ec784a979b3dd578e85153ebdae2fb997ddd78d8)",
+      "antigravity-bundle-aas-agent-mcp-builder@antigravity-awesome-skills (99b7d3b95757ab991b01244ff5015c267b8f1550)",
+      "antigravity-bundle-aas-automation-builder@antigravity-awesome-skills (99b7d3b95757ab991b01244ff5015c267b8f1550)",
+      "antigravity-bundle-aas-data-analytics@antigravity-awesome-skills (99b7d3b95757ab991b01244ff5015c267b8f1550)",
       "antigravity-bundle-agent-architect@antigravity-awesome-skills (ec784a979b3dd578e85153ebdae2fb997ddd78d8)",
       "antigravity-bundle-apple-platform-design@antigravity-awesome-skills (ec784a979b3dd578e85153ebdae2fb997ddd78d8)",
       "antigravity-bundle-architecture-design@antigravity-awesome-skills (ec784a979b3dd578e85153ebdae2fb997ddd78d8)",
+      "a11y-audit@claude-code-skills (fcd4fa1b203a9a0dc44d2482af21adfb53b7a727)",
+      "aeo@claude-code-skills (fcd4fa1b203a9a0dc44d2482af21adfb53b7a727)",
+      "agenthub@claude-code-skills (fcd4fa1b203a9a0dc44d2482af21adfb53b7a727)",
+      "agile-product-owner@claude-code-skills (fcd4fa1b203a9a0dc44d2482af21adfb53b7a727)",
+      "agent-sdk-dev@claude-plugins-official (d9c8f35fd67b9264bdba8f409f5536c470c700d7)",
+      "clangd-lsp@claude-plugins-official (d9c8f35fd67b9264bdba8f409f5536c470c700d7)",
+      "claude-code-setup@claude-plugins-official (d9c8f35fd67b9264bdba8f409f5536c470c700d7)",
+      "canva@cursor-public (b56291ea0a36d0a941e1478b47959be5f1771dee)",
       "figma@cursor-public (07316dd2920d61303ca0e52812b31f5f341e7b15)",
       "gsap-skills@cursor-public (aed9cfd3277740755f6bfc1155c7aa645403b760)",
       "kraken-cli@cursor-public (aa32814cea70913a70c9909693a7abd762963e83)",
       "supabase@cursor-public (release_v0.1.4)",
+      "superpowers@cursor-public (d884ae04edebef577e82ff7c4e143debd0bbec99)",
       "vercel@cursor-public (3d9d9cd0fe5d1bdaedb891135a5c45f19190b83f)",
-      "hackingtool@hackingtool-marketplace (b5d80f007c3c85a0cae48e22e645902d3d5073b8)"
+      "hackingtool@hackingtool-marketplace (b5d80f007c3c85a0cae48e22e645902d3d5073b8)",
+      "andrej-karpathy-skills@karpathy-skills (2c606141936f1eeef17fa3043a72095b4765b9c2)",
+      "ruflo-adr@ruflo (a0c1ac4b4ff84360cb85b577e1da81eb661a078f)",
+      "ruflo-agent@ruflo (a0c1ac4b4ff84360cb85b577e1da81eb661a078f)",
+      "ruflo-agentdb@ruflo (a0c1ac4b4ff84360cb85b577e1da81eb661a078f)",
+      "ruflo-aidefence@ruflo (a0c1ac4b4ff84360cb85b577e1da81eb661a078f)"
     ],
-    "count": 11,
+    "count": 32,
     "skills": [
       "automate",
       "babysit",
@@ -165,6 +186,7 @@
       "graph-navigator",
       "horizon-tracker",
       "intelligence-specialist",
+      "k3-cognitive-router",
       "llm-specialist",
       "loop-worker-coordinator",
       "market-analyst",
@@ -189,10 +211,51 @@
       "witness-curator",
       "workflow-specialist"
     ],
-    "agentsCount": 48,
+    "agentsCount": 49,
+    "rules": [
+      "k3-cognitive-runtime.mdc",
+      "security-scanning.mdc"
+    ],
+    "userSkills": [
+      "k3-cognitive-router"
+    ],
     "mcpServers": [
       "Semgrep",
       "Snyk"
     ]
+  },
+  "k3": {
+    "registry": "expert-registry.yaml",
+    "harness": "harness-profiles.yaml",
+    "cognitive": true,
+    "mode": "full-spectrum"
+  },
+  "integrations": {
+    "catalog": "integrations/catalog.json",
+    "core": "integrations/core.yaml",
+    "generatedAt": "2026-07-30T17:20:23Z",
+    "counts": {
+      "mcp": 2,
+      "hooks": 4,
+      "rules": 2,
+      "agents": 49,
+      "skillsCursorUser": 20,
+      "skillsCursorManaged": 19,
+      "skillsClaude": 40,
+      "pluginSkillsCursor": 3516,
+      "pluginSkillsClaude": 1562,
+      "l2Total": 5078
+    },
+    "domains": {
+      "general": 1125,
+      "agentic": 901,
+      "coding": 881,
+      "infra": 787,
+      "design": 605,
+      "security": 577,
+      "research": 123,
+      "trading": 79
+    },
+    "shards": 15
   }
 }

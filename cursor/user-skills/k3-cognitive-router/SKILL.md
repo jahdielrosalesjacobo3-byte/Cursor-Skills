@@ -40,9 +40,14 @@ Cross-family mixing is allowed. Teacher matrix is a **menu**, not a wall.
 ### 2. Select experts
 
 1. Advisory shared: Semgrep/security on **code** edits only  
-2. Pull from `teacher_matrix` + `domain_routings` + any fitting on-demand expert  
-3. Cap 8 (efficient) or 16 (full-spectrum); wave more experts across RAOVA cycles if needed  
-4. Apply harness profile as a starting kit — extend freely  
+2. **L1 first** — `teacher_matrix` + `domain_routings` + `integrations/core.yaml`  
+3. **L2 on demand** — if L1 has no match, grep `integrations/shards/*.jsonl` for one
+   skill and read only its `SKILL.md`; max 4 per task; never load a shard wholesale
+   ([catalog-l2.md](references/catalog-l2.md))  
+4. Cap 8 (efficient) or 16 (full-spectrum), L2 activations included; wave more
+   experts across RAOVA cycles if needed  
+5. Apply harness profile as a starting kit — extend freely; `catalog_access: none`
+   keeps the profile on L1  
 
 ### 3. RAOVA
 
@@ -69,9 +74,11 @@ Pause honestly; resume-first next turn.
 
 ## References
 
+- [catalog-l2.md](references/catalog-l2.md)
 - [orchestrator-state.schema.json](references/orchestrator-state.schema.json)
 - [raova-and-budgets.md](references/raova-and-budgets.md)
 - [grm-judge.md](references/grm-judge.md)
 - [partial-rollout.md](references/partial-rollout.md)
 - [effort-and-routing.md](references/effort-and-routing.md)
 - Repo: `expert-registry.yaml`, `harness-profiles.yaml`, `AGENTS.md`
+- Catalog: `integrations/catalog.json`, `integrations/core.yaml`, `integrations/INDEX.md`

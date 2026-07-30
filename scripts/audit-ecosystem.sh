@@ -30,10 +30,14 @@ for f in \
   "cursor/rules/k3-cognitive-runtime.mdc" \
   "cursor/rules/security-scanning.mdc" \
   "cursor/user-skills/k3-cognitive-router/SKILL.md" \
+  "cursor/user-skills/k3-cognitive-router/references/catalog-l2.md" \
   "cursor/agents/k3-cognitive-router.md" \
   "harness-profiles.yaml" \
   "AGENTS.md" \
-  "ecosystem-map.md"
+  "ecosystem-map.md" \
+  "integrations/catalog.json" \
+  "integrations/core.yaml" \
+  "integrations/INDEX.md"
 do
   if [[ -e "$ROOT/$f" ]]; then
     ok "repo has $f"
@@ -47,6 +51,56 @@ if grep -q "teacher_matrix:" "$REGISTRY" 2>/dev/null; then
   ok "expert-registry.yaml has teacher_matrix"
 else
   err "expert-registry.yaml missing teacher_matrix"
+fi
+
+# --- Two-level catalog wiring ---
+if grep -q "^catalog_l2:" "$REGISTRY" 2>/dev/null && grep -q "^lookup_policy:" "$REGISTRY" 2>/dev/null; then
+  ok "expert-registry.yaml wires L2 (catalog_l2 + lookup_policy)"
+else
+  err "expert-registry.yaml missing catalog_l2 / lookup_policy"
+fi
+
+if grep -q "catalog_access:" "$ROOT/harness-profiles.yaml" 2>/dev/null; then
+  ok "harness-profiles.yaml declares catalog_access"
+else
+  err "harness-profiles.yaml missing catalog_access"
+fi
+
+SHARDS=$(ls "$ROOT/integrations/shards"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')
+if [[ "$SHARDS" -gt 0 ]]; then
+  ok "integrations shards present ($SHARDS)"
+  # Every shard the manifest points at must exist, and counts must line up.
+  if ! python3 - "$ROOT" <<'PY'
+import json, sys
+from pathlib import Path
+
+repo = Path(sys.argv[1])
+catalog = json.loads((repo / "integrations" / "catalog.json").read_text())
+problems = []
+total = 0
+for shard in catalog.get("shards", []):
+    path = repo / "integrations" / shard["file"]
+    if not path.exists():
+        problems.append(f"missing shard {shard['file']}")
+        continue
+    lines = sum(1 for _ in path.open(encoding="utf-8"))
+    total += lines
+    if lines != shard["count"]:
+        problems.append(f"{shard['file']}: {lines} lines vs catalog {shard['count']}")
+expected = catalog["counts"]["l2Total"]
+if total != expected:
+    problems.append(f"l2Total {expected} vs {total} shard lines")
+for problem in problems:
+    print(problem)
+sys.exit(1 if problems else 0)
+PY
+  then
+    err "integrations catalog is internally inconsistent (see above)"
+  else
+    ok "integrations catalog counts match shard contents"
+  fi
+else
+  err "no shards under integrations/shards/ — run build-integrations-catalog.sh"
 fi
 
 # --- Cursor agents: every *.md should be listed in registry (best-effort grep) ---
@@ -130,6 +184,11 @@ if [[ -f "$CURSOR/agents/k3-cognitive-router.md" ]]; then
   ok "installed ~/.cursor/agents/k3-cognitive-router.md"
 else
   warn "not installed: ~/.cursor/agents/k3-cognitive-router.md"
+fi
+if [[ -f "$CURSOR/secureskills/integrations/catalog.json" ]]; then
+  ok "installed ~/.cursor/secureskills/integrations/catalog.json"
+else
+  warn "not installed: ~/.cursor/secureskills/integrations (run install-to-local.sh)"
 fi
 
 # --- MCP / hooks parity ---

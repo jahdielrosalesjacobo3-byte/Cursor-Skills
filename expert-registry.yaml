@@ -3,10 +3,29 @@
 # activation: core = always eligible; on-demand = activate only when routed
 # shared: true = always-on (like K3 shared experts)
 
-version: 2
-updated: "2026-07-29"
+version: 3
+updated: "2026-07-30"
 source_of_truth: SecureSkills
 polish: "tech-report P1-P5: RAOVA, GRM, teacher_matrix, partial-rollout, harness-profiles"
+
+# ---------------------------------------------------------------------------
+# Two-level catalog (L1 core here, L2 on-demand index)
+# ---------------------------------------------------------------------------
+# This file is L1: the curated experts the router always considers. Everything
+# else — thousands of marketplace plugin skills — lives in the L2 index and is
+# searched only when L1 has no match. Regenerate L2 with
+# scripts/build-integrations-catalog.sh; verify with scripts/verify-integrations.sh.
+catalog_l2: integrations/catalog.json
+catalog_core: integrations/core.yaml
+
+lookup_policy:
+  order: [l1_registry, l1_core_yaml, l2_catalog]
+  l2_when: "no L1 expert covers the task, or the user names a skill/marketplace explicitly"
+  l2_search_fields: [slug, name, description, k3_domain, marketplace]
+  l2_activation: "read the single matching SKILL.md; activated L2 skills count against Top-k"
+  l2_never: "do not load a whole shard or the full catalog into context"
+  l2_max_per_task: 4
+  counts_against_top_k: true
 
 domains:
   - general

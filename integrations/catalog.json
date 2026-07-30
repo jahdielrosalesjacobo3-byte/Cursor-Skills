@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-30T17:34:43Z",
+  "core": "core.yaml",
+  "counts": {
+    "mcp": 2,
+    "hooks": 4,
+    "rules": 2,
+    "agents": 49,
+    "skillsCursorUser": 20,
+    "skillsCursorManaged": 19,
+    "skillsClaude": 40,
+    "pluginSkillsCursor": 3516,
+    "pluginSkillsClaude": 1562,
+    "l2Total": 5078
+  },
+  "domains": {
+    "general": 1125,
+    "agentic": 901,
+    "coding": 881,
+    "infra": 787,
+    "design": 605,
+    "security": 577,
+    "research": 123,
+    "trading": 79
+  },
+  "shards": [
+    {
+      "file": "shards/cursor-agent-browser.jsonl",
+      "runtime": "cursor",
+      "marketplace": "agent-browser",
+      "count": 7
+    },
+    {
+      "file": "shards/cursor-agentic-awesome-skills.jsonl",
+      "runtime": "cursor",
+      "marketplace": "agentic-awesome-skills",
+      "count": 1913
+    },
+    {
+      "file": "shards/cursor-antigravity-awesome-skills.jsonl",
+      "runtime": "cursor",
+      "marketplace": "antigravity-awesome-skills",
+      "count": 1437
+    },
+    {
+      "file": "shards/cursor-claude-code-skills.jsonl",
+      "runtime": "cursor",
+      "marketplace": "claude-code-skills",
+      "count": 11
+    },
+    {
+      "file": "shards/cursor-claude-plugins-official.jsonl",
+      "runtime": "cursor",
+      "marketplace": "claude-plugins-official",
+      "count": 1
+    },
+    {
+      "file": "shards/cursor-cursor-public.jsonl",
+      "runtime": "cursor",
+      "marketplace": "cursor-public",
+      "count": 132
+    },
+    {
+      "file": "shards/cursor-hackingtool-marketplace.jsonl",
+      "runtime": "cursor",
+      "marketplace": "hackingtool-marketplace",
+      "count": 1
+    },
+    {
+      "file": "shards/cursor-karpathy-skills.jsonl",
+      "runtime": "cursor",
+      "marketplace": "karpathy-skills",
+      "count": 1
+    },
+    {
+      "file": "shards/cursor-ruflo.jsonl",
+      "runtime": "cursor",
+      "marketplace": "ruflo",
+      "count": 13
+    },
+    {
+      "file": "shards/claude-agent-browser.jsonl",
+      "runtime": "claude",
+      "marketplace": "agent-browser",
+      "count": 7
+    },
+    {
+      "file": "shards/claude-antigravity-awesome-skills.jsonl",
+      "runtime": "claude",
+      "marketplace": "antigravity-awesome-skills",
+      "count": 1436
+    },
+    {
+      "file": "shards/claude-claude-plugins-official.jsonl",
+      "runtime": "claude",
+      "marketplace": "claude-plugins-official",
+      "count": 15
+    },
+    {
+      "file": "shards/claude-hackingtool-marketplace.jsonl",
+      "runtime": "claude",
+      "marketplace": "hackingtool-marketplace",
+      "count": 1
+    },
+    {
+      "file": "shards/claude-netresearch-claude-code-marketplace.jsonl",
+      "runtime": "claude",
+      "marketplace": "netresearch-claude-code-marketplace",
+      "count": 1
+    },
+    {
+      "file": "shards/claude-ruflo.jsonl",
+      "runtime": "claude",
+      "marketplace": "ruflo",
+      "count": 102
+    }
+  ],
+  "lookupPolicy": {
+    "l1": "expert-registry.yaml + integrations/core.yaml",
+    "l2": "search shards by name/slug/description/k3_domain; never load whole shards into context",
+    "maxActiveExperts": 16
+  }
+}

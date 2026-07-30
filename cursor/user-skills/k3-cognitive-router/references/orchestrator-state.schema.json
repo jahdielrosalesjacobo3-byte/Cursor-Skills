@@ -63,6 +63,21 @@
       "items": { "type": "string" },
       "default": ["security-scanning", "semgrep-hooks"]
     },
+    "l2_activations": {
+      "type": "array",
+      "description": "Marketplace skills pulled from integrations/shards this task; capped at 4 and counted against Top-k",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["id", "path"],
+        "properties": {
+          "id": { "type": "string", "description": "Catalog id, e.g. cursor-plugin:ruflo:adr-create" },
+          "path": { "type": "string" },
+          "marketplace": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
     "expert_usage": {
       "type": "object",
       "additionalProperties": { "type": "integer" },

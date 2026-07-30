@@ -1,10 +1,10 @@
 # Harness profiles — white-box agent modules (K3 §4.2.1)
+#
+# Composable modules: tools, system posture, context strategy, skills, memory, subagents.
+# Pick one profile per task via the cognitive router; do not lock forever to a single harness habit.
 
-Composable modules: tools, system posture, context strategy, skills, memory, subagents.
-Pick one profile per task via the cognitive router; do not lock forever to a single harness habit.
-
-version: 1
-updated: "2026-07-29"
+version: 2
+updated: "2026-07-30"
 
 defaults:
   shared_modules:
@@ -16,6 +16,10 @@ defaults:
   snyk_code: disabled
   topical_locks: false
   posture: full-spectrum-capable
+  # L2 = integrations/catalog.json shards. `l2_on_demand` lets a profile pull a
+  # marketplace skill the core registry does not cover; `none` keeps it on L1.
+  catalog_access: l2_on_demand
+  catalog_index: integrations/catalog.json
 
 profiles:
   full-spectrum:
@@ -30,6 +34,8 @@ profiles:
     grm_judge: optional
     partial_rollout: true
     topical_locks: false
+    catalog_access: l2_on_demand
+    preferred_marketplaces: ["*"]
     notes: "Maximum stack exploitation — any topic; wave experts; no domain veto"
 
   general-light:
@@ -40,7 +46,8 @@ profiles:
     memory: none
     context_strategy: minimal
     subagents: []
-    notes: "Short Q&A and light docs"
+    catalog_access: none
+    notes: "Short Q&A and light docs; stays on L1"
 
   research-deep:
     teacher_family: general
@@ -50,6 +57,8 @@ profiles:
     memory: scratchpad+checkpoints
     context_strategy: attnres_selective
     subagents: [deep-researcher, dossier-investigator]
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [agentic-awesome-skills, antigravity-awesome-skills, agent-browser]
     compaction_hint: "Summarize sources into phase_artifacts.evidence; keep attnres_keys short"
 
   agentic-long:
@@ -61,6 +70,8 @@ profiles:
     context_strategy: compact_at_300k_metaphor
     subagents: [coordinator, goal-planner, browser-agent]
     partial_rollout: true
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [ruflo, agentic-awesome-skills, agent-browser]
     notes: "Long-horizon assistant / multi-tool; resume paused_rollouts first"
 
   coding-default:
@@ -73,6 +84,8 @@ profiles:
     subagents: [coder, tester, reviewer]
     workflows:
       feature_lifecycle: sparc-orchestrator
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [cursor-public, agentic-awesome-skills, antigravity-awesome-skills]
     notes: "Default software work; SPARC only for full features"
 
   security-max:
@@ -86,6 +99,8 @@ profiles:
     grm_judge: required
     snyk_code: disabled
     sast: semgrep
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [hackingtool-marketplace, ruflo, antigravity-awesome-skills]
     notes: "Audits/IR; Semgrep primary; no Snyk Code"
 
   design-ui:
@@ -96,6 +111,8 @@ profiles:
     memory: scratchpad
     context_strategy: attnres_selective
     subagents: [browser-agent]
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [cursor-public, antigravity-awesome-skills, agentic-awesome-skills]
     notes: "Frontend / UI implementation"
 
   infra-deploy:
@@ -106,6 +123,8 @@ profiles:
     memory: scratchpad
     context_strategy: attnres_selective
     subagents: [deployment-expert, performance-optimizer]
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [cursor-public, antigravity-awesome-skills, ruflo]
     notes: "Deploy, perf, migrations"
 
 # Domain → default profile
