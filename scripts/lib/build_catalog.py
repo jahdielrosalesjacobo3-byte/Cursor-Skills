@@ -22,7 +22,8 @@ from pathlib import Path
 
 HOME = Path.home()
 REPO = Path(__file__).resolve().parents[2]
-OUT = REPO / "integrations"
+# CATALOG_OUT lets --check build into a scratch dir instead of dirtying the repo.
+OUT = Path(os.environ.get("CATALOG_OUT") or REPO / "integrations")
 SHARDS = OUT / "shards"
 
 DESC_MAX = 400

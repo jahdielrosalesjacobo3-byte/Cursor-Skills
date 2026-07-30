@@ -12,17 +12,17 @@ PY="${PYTHON:-python3}"
 command -v "$PY" >/dev/null 2>&1 || { echo "ERR:  $PY not found"; exit 2; }
 
 if [[ "${1:-}" == "--check" ]]; then
+  # Build into a scratch dir and diff the shards; catalog.json/core.yaml/INDEX.md
+  # carry a generation timestamp, so only the shard contents are comparable.
   TMP="$(mktemp -d)"
   trap 'rm -rf "$TMP"' EXIT
-  [[ -d "$ROOT/integrations" ]] && cp -R "$ROOT/integrations" "$TMP/before"
-  "$PY" "$ROOT/scripts/lib/build_catalog.py" >/dev/null
-  if [[ -d "$TMP/before" ]] && diff -rq \
-      --exclude=catalog.json --exclude=core.yaml --exclude=INDEX.md \
-      "$TMP/before" "$ROOT/integrations" >/dev/null 2>&1; then
+  CATALOG_OUT="$TMP/fresh" "$PY" "$ROOT/scripts/lib/build_catalog.py" >/dev/null
+  if diff -rq "$ROOT/integrations/shards" "$TMP/fresh/shards" >/dev/null 2>&1; then
     echo "OK:   catalog shards up to date"
     exit 0
   fi
-  echo "WARN: catalog drifted from disk — commit the regenerated files"
+  echo "WARN: catalog drifted from disk — run without --check and commit the result"
+  diff -rq "$ROOT/integrations/shards" "$TMP/fresh/shards" 2>&1 | head -10
   exit 1
 fi
 
