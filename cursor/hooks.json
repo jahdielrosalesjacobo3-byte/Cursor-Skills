@@ -9,6 +9,17 @@
     "afterFileEdit": [
       {
         "command": "/opt/homebrew/bin/semgrep mcp -k record-file-edit -a cursor"
+      },
+      {
+        "command": "/usr/bin/env python3 ./hooks/graphify-auto-update.py",
+        "timeout": 8
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "/usr/bin/env python3 ./hooks/gitleaks-guard.py",
+        "matcher": "git\\s.*\\b(commit|push)\\b",
+        "timeout": 30
       }
     ],
     "postToolUse": [

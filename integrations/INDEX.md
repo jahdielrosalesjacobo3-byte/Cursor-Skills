@@ -1,6 +1,6 @@
 # Integrations catalog
 
-Generated `2026-07-30T17:40:42Z` by `scripts/build-integrations-catalog.sh`.
+Generated `2026-09-02T17:06:50Z` by `scripts/build-integrations-catalog.sh`.
 Regenerate after installing/removing plugins; verify with `scripts/verify-integrations.sh`.
 
 ## Two-level routing
@@ -18,25 +18,27 @@ The K3 cognitive router never loads this catalog wholesale.
 
 | Layer | Count |
 |-------|-------|
-| MCP servers | 2 |
-| Hooks | 4 |
-| Always-apply rules | 2 |
+| MCP servers | 10 |
+| Hooks | 6 |
+| Always-apply rules | 9 |
 | Task agents | 49 |
-| Cursor user skills | 20 |
-| Cursor managed skills | 19 |
+| Cursor user skills | 22 |
+| Cursor managed skills | 29 |
 | Claude skills | 40 |
-| L2 plugin skills | 5078 |
+| Local plugin skills (L1-adjacent) | 23 |
+| L2 plugin skills | 5167 |
 
 ## Shards
 
 | File | Runtime | Marketplace | Skills |
 |------|---------|-------------|--------|
+| `shards/cursor-local-plugin.jsonl` | cursor | local-plugin | 23 |
 | `shards/cursor-agent-browser.jsonl` | cursor | agent-browser | 7 |
 | `shards/cursor-agentic-awesome-skills.jsonl` | cursor | agentic-awesome-skills | 1913 |
 | `shards/cursor-antigravity-awesome-skills.jsonl` | cursor | antigravity-awesome-skills | 1437 |
 | `shards/cursor-claude-code-skills.jsonl` | cursor | claude-code-skills | 11 |
 | `shards/cursor-claude-plugins-official.jsonl` | cursor | claude-plugins-official | 1 |
-| `shards/cursor-cursor-public.jsonl` | cursor | cursor-public | 132 |
+| `shards/cursor-cursor-public.jsonl` | cursor | cursor-public | 221 |
 | `shards/cursor-hackingtool-marketplace.jsonl` | cursor | hackingtool-marketplace | 1 |
 | `shards/cursor-karpathy-skills.jsonl` | cursor | karpathy-skills | 1 |
 | `shards/cursor-ruflo.jsonl` | cursor | ruflo | 13 |
@@ -51,13 +53,13 @@ The K3 cognitive router never loads this catalog wholesale.
 
 | Domain | Skills |
 |--------|--------|
-| general | 1125 |
-| agentic | 901 |
-| coding | 881 |
-| infra | 787 |
-| design | 605 |
-| security | 577 |
-| research | 123 |
+| general | 1142 |
+| agentic | 910 |
+| coding | 901 |
+| infra | 818 |
+| design | 607 |
+| security | 586 |
+| research | 124 |
 | trading | 79 |
 
 ## Querying a shard

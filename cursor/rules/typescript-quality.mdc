@@ -1,0 +1,15 @@
+---
+description: TypeScript/React quality guardrails (scoped to .ts/.tsx; zero cost elsewhere)
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# TypeScript / React
+
+- `strict` TS; no `any`/`@ts-ignore` without a one-line reason; prefer `unknown` + narrowing.
+- Validate all external input at the boundary (zod/valibot); never trust `req.body`, params, env.
+- Server/client boundary: no secrets or server-only imports in client components; Server Actions validate + authorize.
+- Library APIs: check Context7 MCP (`resolve-library-id` → `query-docs`) before guessing signatures.
+- UI: shadcn MCP for components (`search_items_in_registries`); follow `webkit-vercel-react-best-practices`.
+- Tests: Vitest/Jest unit + Playwright/agent-browser for flows; no snapshot-only tests for logic.
+- Structure questions → `graphify query` / Serena `find_referencing_symbols` before broad reads.

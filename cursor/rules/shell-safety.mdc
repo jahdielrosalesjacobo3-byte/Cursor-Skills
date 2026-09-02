@@ -1,0 +1,15 @@
+---
+description: Shell script safety (scoped to .sh/.bash/.zsh)
+globs: ["**/*.sh", "**/*.bash", "**/*.zsh"]
+alwaysApply: false
+---
+
+# Shell scripts
+
+- `#!/usr/bin/env bash` + `set -euo pipefail`; `IFS=$'\n\t'` when iterating.
+- Quote every expansion (`"$var"`, `"${arr[@]}"`); use arrays for command args, never `eval`.
+- `mktemp` for temp files with `trap 'rm -rf "$TMP"' EXIT`.
+- Check binaries with `command -v` before use; fail with a clear message.
+- No secrets in scripts or `ps`-visible args; read from env or stdin.
+- Prefer `--` before positional paths; `rm -rf` only on validated, non-empty variables.
+- Run `shellcheck` when available; skill: `bash-defensive-patterns`.

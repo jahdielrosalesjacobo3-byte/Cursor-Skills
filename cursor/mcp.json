@@ -9,6 +9,54 @@
       "command": "/opt/homebrew/bin/semgrep",
       "args": ["mcp", "-t", "stdio"],
       "env": {}
+    },
+    "graphify": {
+      "command": "${userHome}/.local/bin/graphify-mcp",
+      "args": [],
+      "env": {
+        "GRAPHIFY_MAX_CONTEXTS": "8",
+        "PYTHONHASHSEED": "0"
+      }
+    },
+    "serena": {
+      "command": "${userHome}/.local/bin/serena",
+      "args": [
+        "start-mcp-server",
+        "--context", "ide",
+        "--project", "${workspaceFolder}",
+        "--enable-web-dashboard", "false",
+        "--open-web-dashboard", "false",
+        "--log-level", "ERROR"
+      ],
+      "env": {}
+    },
+    "context7": {
+      "url": "https://mcp.context7.com/mcp/oauth"
+    },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${env:GITHUB_TOKEN}",
+        "X-MCP-Toolsets": "repos,issues,pull_requests,actions,code_security,dependabot,secret_protection,security_advisories"
+      }
+    },
+    "linear": {
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "aws-knowledge": {
+      "url": "https://knowledge-mcp.global.api.aws"
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"],
+      "env": {}
+    },
+    "claude-flow": {
+      "command": "/opt/homebrew/bin/claude-flow",
+      "args": ["mcp", "start"],
+      "env": {
+        "CLAUDE_FLOW_MCP_TRANSPORT": "stdio"
+      }
     }
   }
 }

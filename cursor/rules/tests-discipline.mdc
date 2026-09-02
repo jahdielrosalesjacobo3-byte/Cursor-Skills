@@ -1,0 +1,15 @@
+---
+description: Test discipline (scoped to test files)
+globs: ["**/test_*.py", "**/*_test.py", "**/tests/**", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/__tests__/**"]
+alwaysApply: false
+---
+
+# Tests
+
+- Behavior-first: assert observable outcomes, not implementation details; one concept per test.
+- Deterministic: no wall-clock, network, or random without seeding/mocking; temp dirs via fixtures.
+- Failing test first for bugs (reproduce → fix → green). Skill: `test-driven-development`.
+- Prefer property-based tests for parsers/serializers (`property-based-testing` skill; Hypothesis / fast-check).
+- Use `mutation-testing` skill when coverage is high but confidence is low.
+- Never delete or weaken a failing assertion to pass; explain and ask.
+- Keep test files out of Graphify capability graphs (`.graphifyignore` tests/) but in the full graph.

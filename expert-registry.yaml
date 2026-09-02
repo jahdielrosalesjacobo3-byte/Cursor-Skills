@@ -3,10 +3,10 @@
 # activation: core = always eligible; on-demand = activate only when routed
 # shared: true = always-on (like K3 shared experts)
 
-version: 3
-updated: "2026-07-30"
+version: 4
+updated: "2026-09-02"
 source_of_truth: SecureSkills
-polish: "tech-report P1-P5: RAOVA, GRM, teacher_matrix, partial-rollout, harness-profiles"
+polish: "tech-report P1-P5: RAOVA, GRM, teacher_matrix, partial-rollout, harness-profiles; v4: MCP routing (serena/context7/github/linear/aws/shadcn/claude-flow), Trail of Bits plugin, scoped rules, gitleaks guard"
 
 # ---------------------------------------------------------------------------
 # Two-level catalog (L1 core here, L2 on-demand index)
@@ -44,8 +44,17 @@ effort_levels:
 
 routing_defaults:
   max_active_experts: 16
-  typical_active_experts: 5
+  typical_active_experts: 3
   full_spectrum_max_experts: 16
+  default_effort: low
+  fast_path:
+    default: true
+    top_k_max: 2
+    skip_unless_escalated: [task_subagents, orchestrator_state, grm, l2_catalog_grep]
+    escalate_when:
+      - user asks for depth, audit, orchestration, or full-spectrum
+      - multi-step feature spanning many files plus tests
+      - explicit effort max or harness full-spectrum
   topical_locks: false
   shared_experts:
     - security-scanning
@@ -88,6 +97,26 @@ experts:
     triggers: ["complex task", "multi-agent", "long-horizon", "orchestrate"]
     aliases: ["k3-router", "cognitive-router"]
 
+  - id: graphify
+    domain: coding
+    runtime: cursor-skill
+    path: cursor/user-skills/graphify
+    activation: on-demand
+    shared: false
+    effort_default: low
+    triggers: ["knowledge graph", "god nodes", "graphify", "dependency path", "architecture map", "communities", "symbol path", "code structure"]
+    aliases: ["graphify-skill", "repo-graph"]
+
+  - id: tool-discovery
+    domain: agentic
+    runtime: cursor-skill
+    path: cursor/user-skills/tool-discovery
+    activation: core
+    shared: true
+    effort_default: low
+    triggers: ["mcp", "plugin", "tool", "marketplace", "which skill", "what tools", "integrations", "capabilities"]
+    aliases: ["discover-tools", "mcp-discovery"]
+
   - id: k3-cognitive-router-agent
     domain: agentic
     runtime: cursor-agent
@@ -96,6 +125,201 @@ experts:
     shared: false
     effort_default: high
     triggers: ["Task k3-cognitive-router", "explicit orchestration"]
+
+  - id: gitleaks-guard
+    domain: security
+    runtime: cursor-hook
+    path: cursor/hooks/gitleaks-guard.py
+    activation: core
+    shared: true
+    effort_default: low
+    triggers: ["git commit", "git push"]
+    notes: "beforeShellExecution; denies only on confirmed leaks (gitleaks exit 2); fail-open otherwise"
+
+  - id: graphify-auto-update
+    domain: coding
+    runtime: cursor-hook
+    path: cursor/hooks/graphify-auto-update.py
+    activation: core
+    shared: true
+    effort_default: low
+    triggers: ["afterFileEdit"]
+
+# ---------------------------------------------------------------------------
+# Scoped rules (globs; alwaysApply false — zero cost on unrelated turns)
+# ---------------------------------------------------------------------------
+  - id: python-quality
+    domain: coding
+    runtime: cursor-rule
+    path: cursor/rules/python-quality.mdc
+    activation: core
+    shared: false
+    effort_default: low
+    triggers: ["**/*.py"]
+
+  - id: typescript-quality
+    domain: coding
+    runtime: cursor-rule
+    path: cursor/rules/typescript-quality.mdc
+    activation: core
+    shared: false
+    effort_default: low
+    triggers: ["**/*.ts", "**/*.tsx"]
+
+  - id: iac-security
+    domain: infra
+    runtime: cursor-rule
+    path: cursor/rules/iac-security.mdc
+    activation: core
+    shared: false
+    effort_default: low
+    triggers: ["**/*.tf", "Dockerfile", "k8s", ".github/workflows"]
+
+  - id: tests-discipline
+    domain: coding
+    runtime: cursor-rule
+    path: cursor/rules/tests-discipline.mdc
+    activation: core
+    shared: false
+    effort_default: low
+    triggers: ["test_*.py", "*.test.ts", "*.spec.ts"]
+
+  - id: shell-safety
+    domain: coding
+    runtime: cursor-rule
+    path: cursor/rules/shell-safety.mdc
+    activation: core
+    shared: false
+    effort_default: low
+    triggers: ["**/*.sh"]
+
+# ---------------------------------------------------------------------------
+# Trail of Bits security skills — local Cursor plugin (CC BY-SA 4.0)
+# cursor/plugins/local/trailofbits-security → ~/.cursor/plugins/local
+# ---------------------------------------------------------------------------
+  - id: tob-static-analysis
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/semgrep
+    activation: core
+    effort_default: high
+    triggers: ["semgrep scan", "codeql", "sarif", "static analysis", "run all rulesets"]
+    aliases: ["tob-semgrep", "tob-codeql", "tob-sarif-parsing"]
+    notes: "skills: semgrep, codeql, sarif-parsing; pairs with Semgrep MCP for single-file scans"
+
+  - id: tob-semgrep-rule-creator
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/semgrep-rule-creator
+    activation: on-demand
+    effort_default: high
+    triggers: ["write semgrep rule", "custom rule", "port rule to language"]
+    aliases: ["tob-semgrep-rule-variant-creator"]
+
+  - id: tob-differential-review
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/differential-review
+    activation: core
+    effort_default: high
+    triggers: ["security review of PR", "diff review", "blast radius", "what else could break"]
+    notes: "agent: adversarial-modeler; use with graphify affected + github MCP"
+
+  - id: tob-variant-analysis
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/variant-analysis
+    activation: on-demand
+    effort_default: high
+    triggers: ["variant analysis", "similar bugs", "same vulnerability elsewhere"]
+
+  - id: tob-fp-check
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/fp-check
+    activation: on-demand
+    effort_default: high
+    triggers: ["false positive", "is this exploitable", "verify finding"]
+    notes: "agents: data-flow-analyzer, exploitability-verifier, poc-builder"
+
+  - id: tob-audit-context-building
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/audit-context-building
+    activation: on-demand
+    effort_default: max
+    triggers: ["audit prep", "understand codebase before audit", "first principles review"]
+    notes: "agent: function-analyzer; start from graphify god_nodes"
+
+  - id: tob-supply-chain-risk-auditor
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/supply-chain-risk-auditor
+    activation: on-demand
+    effort_default: high
+    triggers: ["supply chain", "dependency risk", "typosquat", "maintainer risk"]
+    notes: "pairs with snyk_sca_scan / snyk_package_health_check"
+
+  - id: tob-agentic-actions-auditor
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/agentic-actions-auditor
+    activation: on-demand
+    effort_default: high
+    triggers: ["GitHub Actions security", "workflow injection", "AI agent in CI"]
+
+  - id: tob-vulnerability-triage
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/vulnerability-triage-brocards
+    activation: on-demand
+    effort_default: high
+    triggers: ["triage findings", "prioritize vulnerabilities"]
+    aliases: ["tob-entry-point-analyzer", "tob-sharp-edges", "tob-spec-to-code-compliance"]
+
+  - id: tob-burpsuite-project-parser
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/burpsuite-project-parser
+    activation: on-demand
+    effort_default: high
+    triggers: ["burp project", "burp suite export"]
+    notes: "complements 09-web-security"
+
+  - id: tob-yara-rule-authoring
+    domain: security
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/yara-rule-authoring
+    activation: on-demand
+    effort_default: high
+    triggers: ["YARA", "detection rule for sample"]
+    notes: "complements 05-malware-analysis, 06-threat-hunting"
+
+  - id: tob-property-based-testing
+    domain: coding
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/property-based-testing
+    activation: on-demand
+    effort_default: high
+    triggers: ["property-based", "hypothesis", "fast-check", "fuzz the parser"]
+    aliases: ["tob-mutation-testing"]
+
+  - id: tob-modern-python
+    domain: coding
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/modern-python
+    activation: on-demand
+    effort_default: low
+    triggers: ["new python project", "uv ruff pytest", "migrate from pip/poetry"]
+
+  - id: tob-second-opinion
+    domain: coding
+    runtime: cursor-plugin-skill
+    path: cursor/plugins/local/trailofbits-security/skills/second-opinion
+    activation: on-demand
+    effort_default: high
+    triggers: ["second opinion", "independent review of plan"]
+    aliases: ["tob-github-triage", "tob-gh-cli"]
 
 # ---------------------------------------------------------------------------
 # Cursor agents (ruflo) — domain-tagged for Top-k routing
@@ -434,7 +658,7 @@ experts:
     path: cursor/agents/graph-navigator.md
     activation: on-demand
     effort_default: high
-    triggers: ["knowledge graph", "entities"]
+    triggers: ["knowledge graph", "entities", "graphify", "god nodes", "shortest path", "repo structure"]
 
   - id: daa-specialist
     domain: agentic
@@ -774,6 +998,27 @@ deprecated:
     reason: "Out of scope — Cursor provides native Kimi K3; do not expand BYOK scripts"
 
 # ---------------------------------------------------------------------------
+# MCP routing — intent → namespace (servers live in cursor/mcp.json; L1 core.yaml
+# is regenerated from ~/.cursor/mcp.json). Discover schemas with GetDynamicTools
+# before calling. One MCP call = one Act step (fast-path friendly).
+# ---------------------------------------------------------------------------
+mcp_routing:
+  repo_structure_graph:      { namespace: graphify,     tools: [query_graph, get_neighbors, shortest_path, viewer_url] }
+  live_symbols_refactor:     { namespace: serena,       tools: [find_symbol, find_referencing_symbols, replace_symbol_body, rename_symbol, get_diagnostics_for_file] }
+  library_docs_api:          { namespace: context7,     tools: [resolve-library-id, query-docs], auth: oauth }
+  sast_single_file:          { namespace: Semgrep,      tools: [semgrep_scan, semgrep_scan_with_custom_rule] }
+  sca_iac_container:         { namespace: Snyk,         tools: [snyk_sca_scan, snyk_iac_scan, snyk_container_scan, snyk_package_health_check] }
+  github_prs_issues_actions: { namespace: github,       toolsets: [repos, issues, pull_requests, actions, code_security, dependabot, secret_protection, security_advisories], auth: "${env:GITHUB_TOKEN} (gh auth login → export)" }
+  project_tracking:          { namespace: linear,       auth: oauth }
+  aws_docs_regions:          { namespace: aws-knowledge, tools: [search_documentation, read_documentation], auth: none }
+  ui_components:             { namespace: shadcn,       tools: [search_items_in_registries, get_add_command_for_items, get_audit_checklist] }
+  agent_memory_swarm:        { namespace: claude-flow,  tools: [memory_store, memory_search, memory_retrieve, session_*, agent_*, swarm_*, hooks_*], notes: "ruflo v3; 49 SecureSkills agents reference mcp__claude-flow__*" }
+  deploy_logs:               { namespace: Vercel }
+  db_auth:                   { namespace: Supabase }
+  design_refs:               { namespace: [Figma, Mobbin] }
+  optional_not_installed:    { see: integrations/optional-mcp.md, servers: [sentry, terraform, firecrawl, exa, playwright, aws-api] }
+
+# ---------------------------------------------------------------------------
 # 9 teachers (paper MOPD): 3 families × 3 efforts
 # Fine domains map into teacher_family; router picks matrix cell then domain_routings
 # ---------------------------------------------------------------------------
@@ -812,6 +1057,11 @@ domain_routings:
       - reviewer
       - architect
       - git-specialist
+    mcp: [graphify, serena, context7, github]
+    on_demand:
+      - tob-property-based-testing
+      - tob-modern-python
+      - tob-second-opinion
     workflows:
       - sparc-orchestrator  # when effort >= high and task is a feature
   agentic:
@@ -829,6 +1079,14 @@ domain_routings:
       - security-audit
       - 09-web-security
       - review-security
+      - tob-static-analysis
+      - tob-differential-review
+    on_demand:
+      - tob-variant-analysis
+      - tob-fp-check
+      - tob-audit-context-building
+      - tob-supply-chain-risk-auditor
+      - tob-agentic-actions-auditor
   research:
     preferred:
       - deep-researcher

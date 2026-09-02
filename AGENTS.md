@@ -33,6 +33,24 @@ Catalog: `bash scripts/build-integrations-catalog.sh` then `bash scripts/verify-
 8. Partial rollout: pause honestly; resume-first  
 9. Entire ecosystem eligible: cyber 01–19, ruflo, webkit, trading, research, SPARC, MCP  
 
+## Complement layer (v4, 2026-09)
+
+| Need | Use |
+|------|-----|
+| Static repo graph | `graphify` MCP / CLI (`viewer_url` → `graph-3d.html#n=<id>`) |
+| Live symbols, safe refactor | `serena` MCP (`find_symbol`, `find_referencing_symbols`, `rename_symbol`) |
+| Library / framework docs | `context7` MCP (OAuth) |
+| PRs, issues, Actions, code scanning | `github` MCP (`${env:GITHUB_TOKEN}` from `gh auth token`) |
+| Tracking | `linear` MCP (OAuth) |
+| AWS facts | `aws-knowledge` MCP (no auth) |
+| UI components | `shadcn` MCP + Figma / Mobbin |
+| Agent memory, sessions, swarms | `claude-flow` MCP (ruflo v3 — resolves `mcp__claude-flow__*` for the 49 agents) |
+| Codebase audit / PR security review | local plugin `trailofbits-security` (23 skills, 7 agents) + `appsec-audit` harness |
+| Secrets never leave the repo | `gitleaks-guard` hook on `git commit|push` (deny only on confirmed leaks) |
+| Language guardrails | glob-scoped rules: python, typescript, iac, tests, shell (`alwaysApply: false`) |
+
+Routing table: `expert-registry.yaml#mcp_routing`. Not-installed extras: `integrations/optional-mcp.md`.
+
 ## Efficiency (not bans)
 
 - Avoid dumping the entire mega catalog in one shot (context collapse)  

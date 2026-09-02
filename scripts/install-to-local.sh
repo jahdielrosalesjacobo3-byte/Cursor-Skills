@@ -8,15 +8,20 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "==> Installing Cursor MCP + hooks..."
-mkdir -p "$HOME/.cursor"
+mkdir -p "$HOME/.cursor/hooks"
 cp "$ROOT/cursor/mcp.json" "$HOME/.cursor/mcp.json"
 cp "$ROOT/cursor/hooks.json" "$HOME/.cursor/hooks.json"
+if [ -d "$ROOT/cursor/hooks" ]; then
+  rsync -a "$ROOT/cursor/hooks/" "$HOME/.cursor/hooks/"
+  chmod +x "$HOME/.cursor/hooks/"*.py "$HOME/.cursor/hooks/"*.sh 2>/dev/null || true
+fi
 
 echo "==> Installing Cursor rules (K3 cognitive + security-scanning)..."
 mkdir -p "$HOME/.cursor/rules"
 if [ -d "$ROOT/cursor/rules" ]; then
   rsync -a "$ROOT/cursor/rules/" "$HOME/.cursor/rules/"
   echo "    Rules: $(ls "$HOME/.cursor/rules"/*.mdc 2>/dev/null | wc -l | tr -d ' ')"
+  echo "    K3 size: $(wc -c < "$HOME/.cursor/rules/k3-cognitive-runtime.mdc" 2>/dev/null | tr -d ' ') bytes (compact if <2500)"
 fi
 
 echo "==> Installing K3 harness profiles + registry pointers..."
@@ -46,6 +51,18 @@ if [ -d "$ROOT/cursor/user-skills/k3-cognitive-router" ]; then
     "$ROOT/cursor/user-skills/k3-cognitive-router/" \
     "$HOME/.cursor/skills/k3-cognitive-router/"
   echo "    OK: k3-cognitive-router"
+fi
+if [ -d "$ROOT/cursor/user-skills/graphify" ]; then
+  rsync -a --delete \
+    "$ROOT/cursor/user-skills/graphify/" \
+    "$HOME/.cursor/skills/graphify/"
+  echo "    OK: graphify"
+fi
+if [ -d "$ROOT/cursor/user-skills/tool-discovery" ]; then
+  rsync -a --delete \
+    "$ROOT/cursor/user-skills/tool-discovery/" \
+    "$HOME/.cursor/skills/tool-discovery/"
+  echo "    OK: tool-discovery"
 fi
 # Canonical cyber 01–19 as symlinks into user skills (same content as Claude skills)
 if [ -d "$ROOT/claude/skills" ]; then
@@ -114,7 +131,14 @@ mkdir -p "$HOME/.cursor/plugins"
 rsync -a "$ROOT/cursor/plugins/cache/" "$HOME/.cursor/plugins/cache/"
 rsync -a "$ROOT/cursor/plugins/marketplaces/" "$HOME/.cursor/plugins/marketplaces/"
 if [ -d "$ROOT/cursor/plugins/local" ]; then
-  rsync -a "$ROOT/cursor/plugins/local/" "$HOME/.cursor/plugins/local/"
+  mkdir -p "$HOME/.cursor/plugins/local"
+  rsync -a --delete "$ROOT/cursor/plugins/local/" "$HOME/.cursor/plugins/local/"
+  echo "    Local plugins: $(ls "$HOME/.cursor/plugins/local" | tr '\n' ' ')"
+fi
+
+echo "==> MCP runtimes (serena, gitleaks, claude-flow, GITHUB_TOKEN)..."
+if [ "${SECURESKILLS_SKIP_MCP_DEPS:-}" != "1" ]; then
+  bash "$ROOT/scripts/install-mcp-deps.sh" || echo "    WARN: install-mcp-deps.sh reported issues (non-fatal)"
 fi
 
 # Optional: seed current project with SecureCorp .cursor template
@@ -131,4 +155,5 @@ echo "==> Done. Restart Cursor and Claude Code."
 echo "    Run: snyk auth  (if using Snyk MCP)"
 echo "    Audit:  bash scripts/audit-ecosystem.sh"
 echo "    Health: bash scripts/verify-integrations.sh"
+echo "    Latency: bash scripts/verify-cursor-latency.sh  (then NEW Agent chat)"
 echo "    Optional: SECURESKILLS_SEED_PROJECT=1 bash scripts/install-to-local.sh"

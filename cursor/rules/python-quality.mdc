@@ -1,0 +1,16 @@
+---
+description: Python quality guardrails (scoped to .py files; zero cost on other turns)
+globs: ["**/*.py"]
+alwaysApply: false
+---
+
+# Python
+
+- Tooling: `uv` for envs/deps, `ruff` (lint + format), `pytest`; type-check new public APIs (`ty`/`pyright`). Skill: `modern-python` (Trail of Bits plugin).
+- Type hints on new functions; `from __future__ import annotations` in 3.10+ code.
+- No bare `except:`; catch specific exceptions; never swallow errors silently.
+- No `shell=True` with interpolated input; prefer `subprocess.run([...], check=False)` + timeouts.
+- Parameterized SQL only; never f-string queries.
+- Secrets from env/vault, never literals (gitleaks hook blocks commits).
+- Tests next to the change; deterministic, no network unless mocked.
+- Structure questions → `graphify query` / Serena `find_symbol` before broad reads.

@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -163,6 +164,37 @@ def scan_plugin_skills(root: Path, runtime: str) -> list[dict]:
     return sorted(by_key.values(), key=lambda e: e["id"])
 
 
+def scan_local_plugin_skills(root: Path) -> list[dict]:
+    """Index SKILL.md files under ~/.cursor/plugins/local/<plugin>/skills/<name>/.
+
+    Local plugins are curated (e.g. trailofbits-security), so they are L1-adjacent:
+    marketplace is ``local-plugin`` and activation ``core`` so the router sees them
+    before falling back to marketplace shards.
+    """
+    if not root.is_dir():
+        return []
+    entries = []
+    for skill_file in sorted(root.glob("*/skills/*/SKILL.md")):
+        plugin = skill_file.relative_to(root).parts[0]
+        name = skill_file.parent.name
+        fm = read_frontmatter(skill_file)
+        display = fm.get("name") or name
+        description = clean(fm.get("description", ""))
+        entries.append({
+            "id": f"cursor-plugin:local:{plugin}:{name}",
+            "name": display,
+            "slug": name,
+            "description": description,
+            "path": rel_home(skill_file),
+            "runtime": "cursor-plugin",
+            "marketplace": "local-plugin",
+            "plugins": [plugin],
+            "activation": "core",
+            "k3_domain": classify(name, display, description),
+        })
+    return entries
+
+
 def scan_core_skills(root: Path, runtime: str, activation: str = "core") -> list[dict]:
     if not root.is_dir():
         return []
@@ -261,15 +293,26 @@ def scan_mcp(path: Path) -> list[dict]:
     entries = []
     for name, cfg in sorted(data.get("mcpServers", {}).items()):
         command = cfg.get("command", "")
-        entries.append({
+        url = cfg.get("url", "")
+        resolved = command.replace("${userHome}", str(HOME))
+        exists = bool(resolved) and (Path(resolved).exists() or shutil.which(resolved) is not None)
+        entry = {
             "id": f"mcp:{name.lower()}",
             "name": name,
             "runtime": "mcp",
+            "transport": "remote" if url else "stdio",
             "command": command,
+            "url": url,
             "args": cfg.get("args", []),
-            "command_exists": bool(command) and Path(command).exists(),
+            "command_exists": exists if not url else True,
+            "auth": (
+                "header-env" if cfg.get("headers")
+                else "remote-oauth-or-none" if url
+                else "none"
+            ),
             "activation": "core",
-        })
+        }
+        entries.append(entry)
     return entries
 
 
@@ -351,6 +394,7 @@ def disk_counts() -> dict[str, int]:
     return {
         "pluginSkillsCursor": len(scan_plugin_skills(HOME / ".cursor" / "plugins" / "cache", "cursor-plugin")),
         "pluginSkillsClaude": len(scan_plugin_skills(HOME / ".claude" / "plugins" / "cache", "claude-plugin")),
+        "pluginSkillsLocal": len(scan_local_plugin_skills(HOME / ".cursor" / "plugins" / "local")),
         "agents": len(scan_agents(HOME / ".cursor" / "agents")),
         "rules": len(scan_rules(HOME / ".cursor" / "rules")),
         "mcp": len(scan_mcp(HOME / ".cursor" / "mcp.json")),
@@ -397,8 +441,13 @@ def main() -> int:
 
     cursor_plugins = scan_plugin_skills(HOME / ".cursor" / "plugins" / "cache", "cursor-plugin")
     claude_plugins = scan_plugin_skills(HOME / ".claude" / "plugins" / "cache", "claude-plugin")
+    local_plugins = scan_local_plugin_skills(HOME / ".cursor" / "plugins" / "local")
 
-    shards = write_shards(cursor_plugins, "cursor") + write_shards(claude_plugins, "claude")
+    shards = (
+        write_shards(local_plugins, "cursor")
+        + write_shards(cursor_plugins, "cursor")
+        + write_shards(claude_plugins, "claude")
+    )
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -429,6 +478,9 @@ skills_cursor_managed:
 skills_claude:
 {yaml_block(claude_skills)}
 
+skills_local_plugins:
+{yaml_block(local_plugins)}
+
 profiles:
 {yaml_block(profiles)}
 """
@@ -448,6 +500,7 @@ profiles:
             "skillsClaude": len(claude_skills),
             "pluginSkillsCursor": len(cursor_plugins),
             "pluginSkillsClaude": len(claude_plugins),
+            "pluginSkillsLocal": len(local_plugins),
             "l2Total": len(cursor_plugins) + len(claude_plugins),
         },
         "domains": {},
@@ -498,6 +551,7 @@ The K3 cognitive router never loads this catalog wholesale.
 | Cursor user skills | {len(cursor_user_skills)} |
 | Cursor managed skills | {len(cursor_managed_skills)} |
 | Claude skills | {len(claude_skills)} |
+| Local plugin skills (L1-adjacent) | {len(local_plugins)} |
 | L2 plugin skills | {len(cursor_plugins) + len(claude_plugins)} |
 
 ## Shards

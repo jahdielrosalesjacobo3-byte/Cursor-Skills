@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "exportedAt": "2026-07-30T11:40:42",
+  "version": 4,
+  "exportedAt": "2026-09-02T10:43:20",
   "claude": {
     "installed": [
       "agent-browser@agent-browser",
@@ -99,7 +99,10 @@
       "webkit-web-design-guidelines",
       "webkit-web-reader"
     ],
-    "skillsCount": 40
+    "skillsCount": 40,
+    "recommended_marketplaces": [
+      "trailofbits/skills  (/plugin marketplace add trailofbits/skills)"
+    ]
   },
   "cursor": {
     "installed": [
@@ -256,5 +259,34 @@
       "trading": 79
     },
     "shards": 15
+  },
+  "local": {
+    "cursor": [
+      "trailofbits-security (cursor/plugins/local; upstream trailofbits/skills @14e5a10, CC BY-SA 4.0; 23 skills, 7 agents)"
+    ],
+    "refresh": "bash scripts/vendor-trailofbits.sh"
+  },
+  "mcp": {
+    "installed": [
+      "Snyk",
+      "Semgrep",
+      "graphify",
+      "serena",
+      "context7 (oauth)",
+      "github (${env:GITHUB_TOKEN})",
+      "linear (oauth)",
+      "aws-knowledge (no auth)",
+      "shadcn",
+      "claude-flow (ruflo v3)"
+    ],
+    "optional": "integrations/optional-mcp.md",
+    "deps": "bash scripts/install-mcp-deps.sh"
+  },
+  "hooks": {
+    "cursor": [
+      "semgrep (sessionStart/afterFileEdit/postToolUse/stop)",
+      "graphify-auto-update.py (afterFileEdit)",
+      "gitleaks-guard.py (beforeShellExecution: git commit|push)"
+    ]
   }
 }

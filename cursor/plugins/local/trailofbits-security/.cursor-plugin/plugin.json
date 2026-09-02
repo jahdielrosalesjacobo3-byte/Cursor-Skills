@@ -1,0 +1,29 @@
+{
+  "name": "trailofbits-security",
+  "displayName": "Trail of Bits Security Skills (curated)",
+  "version": "2026.09.02",
+  "description": "Curated subset of trailofbits/skills for AI-assisted security auditing: Semgrep/CodeQL/SARIF static analysis, Semgrep rule authoring, differential and variant analysis, false-positive verification, audit context building, supply-chain and GitHub Actions auditing, YARA authoring, property-based and mutation testing, modern Python tooling. Complements SecureSkills cyber 01-19, Semgrep MCP and Graphify.",
+  "author": {
+    "name": "Trail of Bits (upstream); SecureSkills (curation)"
+  },
+  "homepage": "https://github.com/trailofbits/skills",
+  "repository": "https://github.com/trailofbits/skills",
+  "license": "CC-BY-SA-4.0",
+  "keywords": [
+    "security",
+    "appsec",
+    "semgrep",
+    "codeql",
+    "sarif",
+    "audit",
+    "variant-analysis",
+    "differential-review",
+    "fuzzing",
+    "yara",
+    "supply-chain",
+    "trailofbits"
+  ],
+  "category": "security",
+  "skills": ["./skills"],
+  "agents": ["./agents"]
+}

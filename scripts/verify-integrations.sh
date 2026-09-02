@@ -48,8 +48,17 @@ if [[ -f "$MCP_JSON" ]]; then
   if "$PY" -c "import json,sys; json.load(open(sys.argv[1]))" "$MCP_JSON" 2>/dev/null; then
     ok "mcp.json is valid JSON"
     while IFS=$'\t' read -r name command; do
+      if [[ "$command" == url:* ]]; then
+        ok "MCP $name -> remote ${command#url:}"
+        continue
+      fi
+      command="${command//\$\{userHome\}/$HOME}"
       if [[ "$command" != /* ]]; then
-        warn "MCP $name uses a relative command: $command"
+        if command -v "$command" >/dev/null 2>&1; then
+          ok "MCP $name -> $(command -v "$command") (PATH)"
+        else
+          warn "MCP $name uses a relative command: $command"
+        fi
       elif [[ -x "$command" ]]; then
         ok "MCP $name -> $command"
       else
@@ -59,7 +68,10 @@ if [[ -f "$MCP_JSON" ]]; then
 import json, sys
 cfg = json.load(open(sys.argv[1]))
 for name, server in cfg.get("mcpServers", {}).items():
-    print(f"{name}\t{server.get('command','')}")
+    if server.get("url"):
+        print(f"{name}\turl:{server['url']}")
+    else:
+        print(f"{name}\t{server.get('command','')}")
 PY
     )
   else

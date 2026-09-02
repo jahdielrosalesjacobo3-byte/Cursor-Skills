@@ -2,22 +2,108 @@
 # Source of truth: scripts/build-integrations-catalog.sh
 # Do not hand-edit; regenerate after changing MCP/hooks/rules/agents/skills.
 version: 1
-generated_at: "2026-07-30T17:40:42Z"
+generated_at: "2026-09-02T17:06:50Z"
 
 mcp:
   - id: "mcp:semgrep"
     name: "Semgrep"
     runtime: "mcp"
+    transport: "stdio"
     command: "/opt/homebrew/bin/semgrep"
+    url: ""
     args: ["mcp", "-t", "stdio"]
     command_exists: true
+    auth: "none"
     activation: "core"
   - id: "mcp:snyk"
     name: "Snyk"
     runtime: "mcp"
+    transport: "stdio"
     command: "/opt/homebrew/bin/snyk"
+    url: ""
     args: ["mcp", "-t", "stdio"]
     command_exists: true
+    auth: "none"
+    activation: "core"
+  - id: "mcp:aws-knowledge"
+    name: "aws-knowledge"
+    runtime: "mcp"
+    transport: "remote"
+    command: ""
+    url: "https://knowledge-mcp.global.api.aws"
+    args: []
+    command_exists: true
+    auth: "remote-oauth-or-none"
+    activation: "core"
+  - id: "mcp:claude-flow"
+    name: "claude-flow"
+    runtime: "mcp"
+    transport: "stdio"
+    command: "/opt/homebrew/bin/claude-flow"
+    url: ""
+    args: ["mcp", "start"]
+    command_exists: true
+    auth: "none"
+    activation: "core"
+  - id: "mcp:context7"
+    name: "context7"
+    runtime: "mcp"
+    transport: "remote"
+    command: ""
+    url: "https://mcp.context7.com/mcp/oauth"
+    args: []
+    command_exists: true
+    auth: "remote-oauth-or-none"
+    activation: "core"
+  - id: "mcp:github"
+    name: "github"
+    runtime: "mcp"
+    transport: "remote"
+    command: ""
+    url: "https://api.githubcopilot.com/mcp/"
+    args: []
+    command_exists: true
+    auth: "header-env"
+    activation: "core"
+  - id: "mcp:graphify"
+    name: "graphify"
+    runtime: "mcp"
+    transport: "stdio"
+    command: "${userHome}/.local/bin/graphify-mcp"
+    url: ""
+    args: []
+    command_exists: true
+    auth: "none"
+    activation: "core"
+  - id: "mcp:linear"
+    name: "linear"
+    runtime: "mcp"
+    transport: "remote"
+    command: ""
+    url: "https://mcp.linear.app/mcp"
+    args: []
+    command_exists: true
+    auth: "remote-oauth-or-none"
+    activation: "core"
+  - id: "mcp:serena"
+    name: "serena"
+    runtime: "mcp"
+    transport: "stdio"
+    command: "${userHome}/.local/bin/serena"
+    url: ""
+    args: ["start-mcp-server", "--context", "ide", "--project", "${workspaceFolder}", "--enable-web-dashboard", "false", "--open-web-dashboard", "false", "--log-level", "ERROR"]
+    command_exists: true
+    auth: "none"
+    activation: "core"
+  - id: "mcp:shadcn"
+    name: "shadcn"
+    runtime: "mcp"
+    transport: "stdio"
+    command: "npx"
+    url: ""
+    args: ["-y", "shadcn@latest", "mcp"]
+    command_exists: true
+    auth: "none"
     activation: "core"
 
 hooks:
@@ -27,6 +113,20 @@ hooks:
     command: "/opt/homebrew/bin/semgrep mcp -k record-file-edit -a cursor"
     binary_exists: true
     matcher: null
+    activation: "core"
+  - id: "hook:afterFileEdit:1"
+    event: "afterFileEdit"
+    runtime: "hook"
+    command: "/usr/bin/env python3 ./hooks/graphify-auto-update.py"
+    binary_exists: true
+    matcher: null
+    activation: "core"
+  - id: "hook:beforeShellExecution:0"
+    event: "beforeShellExecution"
+    runtime: "hook"
+    command: "/usr/bin/env python3 ./hooks/gitleaks-guard.py"
+    binary_exists: true
+    matcher: "git\\s.*\\b(commit|push)\\b"
     activation: "core"
   - id: "hook:postToolUse:0"
     event: "postToolUse"
@@ -51,17 +151,59 @@ hooks:
     activation: "core"
 
 rules:
+  - id: "cursor-rule:graphify-graph-first"
+    name: "graphify-graph-first"
+    path: "~/.cursor/rules/graphify-graph-first.mdc"
+    runtime: "cursor-rule"
+    always_apply: true
+    activation: "core"
+  - id: "cursor-rule:iac-security"
+    name: "iac-security"
+    path: "~/.cursor/rules/iac-security.mdc"
+    runtime: "cursor-rule"
+    always_apply: false
+    activation: "core"
   - id: "cursor-rule:k3-cognitive-runtime"
     name: "k3-cognitive-runtime"
     path: "~/.cursor/rules/k3-cognitive-runtime.mdc"
     runtime: "cursor-rule"
     always_apply: true
     activation: "core"
+  - id: "cursor-rule:python-quality"
+    name: "python-quality"
+    path: "~/.cursor/rules/python-quality.mdc"
+    runtime: "cursor-rule"
+    always_apply: false
+    activation: "core"
   - id: "cursor-rule:security-scanning"
     name: "security-scanning"
     path: "~/.cursor/rules/security-scanning.mdc"
     runtime: "cursor-rule"
     always_apply: true
+    activation: "core"
+  - id: "cursor-rule:shell-safety"
+    name: "shell-safety"
+    path: "~/.cursor/rules/shell-safety.mdc"
+    runtime: "cursor-rule"
+    always_apply: false
+    activation: "core"
+  - id: "cursor-rule:tests-discipline"
+    name: "tests-discipline"
+    path: "~/.cursor/rules/tests-discipline.mdc"
+    runtime: "cursor-rule"
+    always_apply: false
+    activation: "core"
+  - id: "cursor-rule:tool-discovery"
+    name: "tool-discovery"
+    path: "~/.cursor/rules/tool-discovery.mdc"
+    runtime: "cursor-rule"
+    always_apply: true
+    activation: "core"
+  - id: "cursor-rule:typescript-quality"
+    name: "typescript-quality"
+    path: "~/.cursor/rules/typescript-quality.mdc"
+    runtime: "cursor-rule"
+    always_apply: false
     activation: "core"
 
 agents:
@@ -266,12 +408,12 @@ agents:
   - id: "cursor-agent:graph-navigator"
     name: "graph-navigator"
     slug: "graph-navigator"
-    description: "Extracts entities and relations from code and docs, builds knowledge graphs, and traverses them with pathfinder scoring"
+    description: "Graphify-first structural graph navigation; AgentDB for cross-session memory; kg-extract fallback when no graph.json"
     path: "~/.cursor/agents/graph-navigator.md"
     runtime: "cursor-agent"
     marketplace: "local"
     activation: "core"
-    k3_domain: "coding"
+    k3_domain: "agentic"
   - id: "cursor-agent:horizon-tracker"
     name: "horizon-tracker"
     slug: "horizon-tracker"
@@ -374,7 +516,7 @@ agents:
   - id: "cursor-agent:researcher"
     name: "researcher"
     slug: "researcher"
-    description: "Pathfinder research specialist — traverses RuVector memory graphs and codebase to surface patterns, dependencies, and prior art"
+    description: "Pathfinder research specialist — Graphify structural graph first, then RuVector/AgentDB memory, then codebase"
     path: "~/.cursor/agents/researcher.md"
     runtime: "cursor-agent"
     marketplace: "local"
@@ -698,11 +840,31 @@ skills_cursor_user:
     activation: "core"
     symlink: true
     k3_domain: "security"
+  - id: "cursor-skill:graphify"
+    name: "graphify"
+    slug: "graphify"
+    description: ">- Query structural knowledge graphs built from code (tree-sitter AST, local, no LLM). Use for architecture, dependencies, symbol paths, god nodes, and communities when graphify-out/graph.json exists. Complements AgentDB/RuVector semantic memory."
+    path: "~/.cursor/skills/graphify/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "agentic"
   - id: "cursor-skill:k3-cognitive-router"
     name: "k3-cognitive-router"
     slug: "k3-cognitive-router"
     description: ">- Full-spectrum K3 cognitive router. Use for any topic — coding, security research, trading, design, infra, research, agentic work — with RAOVA, teacher routing, optional budgets/GRM, partial-rollout resume, and harness profiles. Routing optimizes the SecureSkills stack; it never vetoes user topics."
     path: "~/.cursor/skills/k3-cognitive-router/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "security"
+  - id: "cursor-skill:tool-discovery"
+    name: "tool-discovery"
+    slug: "tool-discovery"
+    description: ">- Discover available MCP servers, L1 experts/skills, and marketplace tools before acting. Use when a task may need Semgrep, Snyk, Vercel, Supabase, Graphify, Figma, plugins, or any external capability — without asking the user first."
+    path: "~/.cursor/skills/tool-discovery/SKILL.md"
     runtime: "cursor-skill"
     marketplace: "local"
     activation: "core"
@@ -720,16 +882,16 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "general"
-  - id: "cursor-skill:babysit"
-    name: "babysit"
-    slug: "babysit"
+  - id: "cursor-skill:autopilot"
+    name: "autopilot"
+    slug: "autopilot"
     description: ">- Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop."
-    path: "~/.cursor/skills-cursor/babysit/SKILL.md"
+    path: "~/.cursor/skills-cursor/autopilot/SKILL.md"
     runtime: "cursor-skill"
     marketplace: "local"
     activation: "core"
     symlink: false
-    k3_domain: "general"
+    k3_domain: "agentic"
   - id: "cursor-skill:canvas"
     name: "canvas"
     slug: "canvas"
@@ -780,11 +942,51 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "agentic"
+  - id: "cursor-skill:deploy-with-vercel"
+    name: "deploy-with-vercel"
+    slug: "deploy-with-vercel"
+    description: ">- Link this repository to a Vercel project and deploy it using the Vercel MCP tools."
+    path: "~/.cursor/skills-cursor/deploy-with-vercel/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "infra"
+  - id: "cursor-skill:env-setup"
+    name: "env-setup"
+    slug: "env-setup"
+    description: "Explain, inspect, configure, and troubleshoot Cloud Agent development environments. Use when the user asks about environment setup, changing/improving the environment, or triggering/testing a build."
+    path: "~/.cursor/skills-cursor/env-setup/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "agentic"
+  - id: "cursor-skill:goal"
+    name: "goal"
+    slug: "goal"
+    description: "Set a goal that Cursor will pursue to completion."
+    path: "~/.cursor/skills-cursor/goal/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "general"
   - id: "cursor-skill:loop"
     name: "loop"
     slug: "loop"
     description: ">- Run a prompt or skill in this session on a recurring or variable interval (e.g. /loop 5m /foo)."
     path: "~/.cursor/skills-cursor/loop/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "agentic"
+  - id: "cursor-skill:migrate-to-builds"
+    name: "migrate-to-builds"
+    slug: "migrate-to-builds"
+    description: "Test that a Cloud Agent environment will work with prebuilt environment builds and recommend any required changes. Use when the user wants to migrate to builds, test build compatibility, or follow the Builds page setup-agent flow."
+    path: "~/.cursor/skills-cursor/migrate-to-builds/SKILL.md"
     runtime: "cursor-skill"
     marketplace: "local"
     activation: "core"
@@ -800,11 +1002,41 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "agentic"
+  - id: "cursor-skill:new-repo"
+    name: "new-repo"
+    slug: "new-repo"
+    description: ">- Create a Cursor-hosted repo for the current project and push it. Use when a project has no git remote yet and the user asks to create a repo on Cursor, push the project to Cursor, or set up a Cursor-hosted remote; installs and signs in the origin CLI when needed."
+    path: "~/.cursor/skills-cursor/new-repo/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "coding"
   - id: "cursor-skill:onboard"
     name: "onboard"
     slug: "onboard"
     description: ">- Use /onboard for a focused Cursor onboarding flow that learns basic preferences, picks a first goal, and routes the user to the right next action."
     path: "~/.cursor/skills-cursor/onboard/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "general"
+  - id: "cursor-skill:origin"
+    name: "origin"
+    slug: "origin"
+    description: ">- Install, sign in, update, or repair the origin CLI for repos hosted on Cursor (origin.cursor.com). Use when the CLI is missing or outdated, git push/pull fails to authenticate against origin.cursor.com, or the user asks to set up, clone, or configure Cursor-hosted repos."
+    path: "~/.cursor/skills-cursor/origin/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "coding"
+  - id: "cursor-skill:rename-chat"
+    name: "rename-chat"
+    slug: "rename-chat"
+    description: ">- Rename the current chat to match its focus. Use only when the user invokes /rename-chat. Optional text after the command steers the title."
+    path: "~/.cursor/skills-cursor/rename-chat/SKILL.md"
     runtime: "cursor-skill"
     marketplace: "local"
     activation: "core"
@@ -850,6 +1082,16 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "infra"
+  - id: "cursor-skill:share"
+    name: "share"
+    slug: "share"
+    description: ">- Save, back up, or share the current project on Cursor — creates a repo (a saved, versioned copy that isn't public) even for users who have never used git, handling all setup automatically. Use when the user asks to save, back up, publish, or share their project on Cursor, or how to not lose it."
+    path: "~/.cursor/skills-cursor/share/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "coding"
   - id: "cursor-skill:shell"
     name: "shell"
     slug: "shell"
@@ -880,6 +1122,16 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "agentic"
+  - id: "cursor-skill:subscribe"
+    name: "subscribe"
+    slug: "subscribe"
+    description: "Wait for external events (GitHub CI results, PR activity, Slack messages, Linear issues) by subscribing with the cursor-subscriptions MCP tools instead of polling."
+    path: "~/.cursor/skills-cursor/subscribe/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "agentic"
   - id: "cursor-skill:update-cli-config"
     name: "update-cli-config"
     slug: "update-cli-config"
@@ -900,6 +1152,16 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "general"
+  - id: "cursor-skill:walkthrough-artifacts"
+    name: "walkthrough-artifacts"
+    slug: "walkthrough-artifacts"
+    description: "Create walkthrough artifacts (screenshots and screen recordings) that prove code changes work. Use when finishing tested changes and uploading demo evidence for the user."
+    path: "~/.cursor/skills-cursor/walkthrough-artifacts/SKILL.md"
+    runtime: "cursor-skill"
+    marketplace: "local"
+    activation: "core"
+    symlink: false
+    k3_domain: "coding"
 
 skills_claude:
   - id: "claude-skill:01-recon-osint"
@@ -910,7 +1172,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:02-vulnerability-scanner"
     name: "Vulnerability Scanning & Assessment"
@@ -920,7 +1182,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:03-exploit-development"
     name: "Exploit Development & Payload Engineering"
@@ -930,7 +1192,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:04-reverse-engineering"
     name: "Reverse Engineering & Binary Analysis"
@@ -940,7 +1202,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "general"
   - id: "claude-skill:05-malware-analysis"
     name: "Malware Analysis & Sandboxing"
@@ -950,7 +1212,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:06-threat-hunting"
     name: "Threat Hunting & IOC Analysis"
@@ -960,7 +1222,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:07-incident-response"
     name: "Incident Response & Digital Forensics"
@@ -970,7 +1232,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:08-network-security"
     name: "Network Security & Traffic Analysis"
@@ -980,7 +1242,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:09-web-security"
     name: "Web Application Security Testing"
@@ -990,7 +1252,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:10-cloud-security"
     name: "Cloud Security & Container Hardening"
@@ -1000,7 +1262,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:11-csoc-automation"
     name: "CSOC Operations & Playbook Automation"
@@ -1010,7 +1272,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:12-log-analysis"
     name: "Log Analysis & SIEM Integration"
@@ -1020,7 +1282,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:13-crypto-analysis"
     name: "Cryptographic Analysis & Assessment"
@@ -1030,7 +1292,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:14-red-team-ops"
     name: "Red Team Operations & Engagement Planning"
@@ -1040,7 +1302,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:15-blue-team-defense"
     name: "Blue Team Defense & Hardening"
@@ -1050,7 +1312,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:16-ai-llm-security"
     name: "AI & LLM Security"
@@ -1060,7 +1322,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:17-mobile-security"
     name: "Mobile Application Security"
@@ -1070,7 +1332,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:18-ot-ics-security"
     name: "OT / ICS / SCADA Security"
@@ -1080,7 +1342,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:19-grc-compliance"
     name: "GRC & Compliance"
@@ -1090,7 +1352,7 @@ skills_claude:
     runtime: "claude-skill"
     marketplace: "local"
     activation: "core"
-    symlink: true
+    symlink: false
     k3_domain: "security"
   - id: "claude-skill:clone-website"
     name: "clone-website"
@@ -1302,6 +1564,238 @@ skills_claude:
     activation: "core"
     symlink: false
     k3_domain: "research"
+
+skills_local_plugins:
+  - id: "cursor-plugin:local:trailofbits-security:agentic-actions-auditor"
+    name: "agentic-actions-auditor"
+    slug: "agentic-actions-auditor"
+    description: "Audits GitHub Actions workflows for security vulnerabilities in AI agent integrations including Claude Code Action, Gemini CLI, OpenAI Codex, and GitHub AI Inference. Detects attack vectors where attacker-controlled input reaches AI agents running in CI/CD pipelines, including env var intermediary patterns, direct expression injection, dangerous sandbox configurations, and wildcard user allowlist…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/agentic-actions-auditor/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:audit-context-building"
+    name: "audit-context-building"
+    slug: "audit-context-building"
+    description: "Understand a codebase before looking for bugs in it - what each function assumes, what it guarantees, and what it depends on elsewhere. Use when starting an audit, threat model, or architecture review on unfamiliar code, and before any vulnerability-hunting pass."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/audit-context-building/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:burpsuite-project-parser"
+    name: "burpsuite-project-parser"
+    slug: "burpsuite-project-parser"
+    description: "Searches and explores Burp Suite project files (.burp) from the command line. Use when searching response headers or bodies with regex patterns, extracting security audit findings, dumping proxy history or site map data, or analyzing HTTP traffic captured in a Burp project."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/burpsuite-project-parser/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:codeql"
+    name: "codeql"
+    slug: "codeql"
+    description: ">- Scans a codebase for security vulnerabilities using CodeQL's interprocedural data flow and taint tracking analysis. Triggers on \"run codeql\", \"codeql scan\", \"build codeql database\", \"SAST scan\", \"taint analysis\", \"dataflow analysis\", or \"find vulnerabilities in this repo\". Covers Python, JavaScript/TypeScript, Go, Java/Kotlin, C/C++, C#, Ruby, and Swift. Supports \"run all\" (security-and-qualit…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/codeql/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:differential-review"
+    name: "differential-review"
+    slug: "differential-review"
+    description: "Performs security-focused differential review of code changes. Adapts analysis depth to codebase size, uses git blame for context, calculates blast radius by counting callers, checks test coverage of modified code, and generates a markdown report. Use when reviewing a PR, commit, or diff for security vulnerabilities, checking whether a change re-introduces a previously fixed bug, asking what else…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/differential-review/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:entry-point-analyzer"
+    name: "entry-point-analyzer"
+    slug: "entry-point-analyzer"
+    description: "Analyzes smart contract codebases to identify state-changing entry points for security auditing. Detects externally callable functions that modify state, categorizes them by access level (public, admin, role-restricted, contract-only), and generates structured audit reports. Excludes view/pure/read-only functions. Use when auditing smart contracts (Solidity, Vyper, Solana/Rust, Move, TON, CosmWas…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/entry-point-analyzer/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:fp-check"
+    name: "fp-check"
+    slug: "fp-check"
+    description: "Systematically verifies suspected security bugs to eliminate false positives, producing a TRUE POSITIVE or FALSE POSITIVE verdict with documented evidence for each. Use when asked whether a specific finding is real, exploitable, or a false positive, or to verify or validate a suspected vulnerability — not for hunting or discovering new bugs."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/fp-check/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:gh-cli"
+    name: "gh-cli"
+    slug: "gh-cli"
+    description: "Enforces authenticated gh CLI workflows over unauthenticated curl, WebFetch, and MCP fetch patterns. Use when working with GitHub URLs, API access, pull requests, or issues."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/gh-cli/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "agentic"
+  - id: "cursor-plugin:local:trailofbits-security:github-triage"
+    name: "github-triage"
+    slug: "github-triage"
+    description: "Triages a repository's open GitHub issues and pull requests via the gh CLI. Optionally reviews and merges ready PRs — incrementally merging passing automated/bot PRs and maintainer-approved ones, and spawning review subagents for never-reviewed ones — then closes already-resolved issues with comments citing the resolving PR or commit, cross-links issues with their pending fix PRs, and assigns loc…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/github-triage/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "agentic"
+  - id: "cursor-plugin:local:trailofbits-security:modern-python"
+    name: "modern-python"
+    slug: "modern-python"
+    description: "Configures Python projects with modern tooling (uv, ruff, ty). Use when creating projects, writing standalone scripts, or migrating from pip/Poetry/mypy/black."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/modern-python/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "coding"
+  - id: "cursor-plugin:local:trailofbits-security:mutation-testing"
+    name: "mutation-testing"
+    slug: "mutation-testing"
+    description: "Configures mewt or muton mutation testing campaigns — scopes targets, tunes timeouts, and optimizes long-running runs. Use when the user mentions mewt, muton, mutation testing, or wants to configure or optimize a mutation testing campaign."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/mutation-testing/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "coding"
+  - id: "cursor-plugin:local:trailofbits-security:property-based-testing"
+    name: "property-based-testing"
+    slug: "property-based-testing"
+    description: "Writes, reviews, and debugs property-based tests — Hypothesis, fast-check, proptest, jqwik, rapid, and Echidna or Medusa for Solidity invariants. Use whenever tests should cover a whole input domain instead of a hand-picked list of examples: encode/decode and serialize/deserialize pairs, parsers, canonicalizers and normalizers, validators, numeric and Decimal types, comparators and sort order, da…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/property-based-testing/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "coding"
+  - id: "cursor-plugin:local:trailofbits-security:sarif-parsing"
+    name: "sarif-parsing"
+    slug: "sarif-parsing"
+    description: ">- Parses and processes SARIF files from static analysis tools like CodeQL, Semgrep, or other scanners. Triggers on \"parse sarif\", \"read scan results\", \"aggregate findings\", \"deduplicate alerts\", or \"process sarif output\". Handles filtering, deduplication, format conversion, and CI/CD integration of SARIF data. Does NOT run scans — use the Semgrep or CodeQL skills for that."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/sarif-parsing/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:second-opinion"
+    name: "second-opinion"
+    slug: "second-opinion"
+    description: "Runs external LLM code reviews (OpenAI Codex or Google Antigravity CLI) on uncommitted changes, branch diffs, or specific commits. Use when the user asks for a second opinion, external review, codex review, gemini review, antigravity review, or mentions /second-opinion."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/second-opinion/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "agentic"
+  - id: "cursor-plugin:local:trailofbits-security:semgrep"
+    name: "semgrep"
+    slug: "semgrep"
+    description: ">- Runs a Semgrep security scan over a codebase: detects languages, selects rulesets, presents the plan for explicit approval, then runs every approved ruleset through scripts/run-scans.sh, which batches the semgrep processes and writes scans.json, and merges the output to SARIF. Supports two scan modes, \"run all\" for full ruleset coverage and \"important only\" for security findings at medium-to-h…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/semgrep/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:semgrep-rule-creator"
+    name: "semgrep-rule-creator"
+    slug: "semgrep-rule-creator"
+    description: "Creates custom Semgrep rules for detecting security vulnerabilities, bug patterns, and code patterns. Use when writing Semgrep rules or building custom static analysis detections."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/semgrep-rule-creator/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:semgrep-rule-variant-creator"
+    name: "semgrep-rule-variant-creator"
+    slug: "semgrep-rule-variant-creator"
+    description: "Creates language variants of existing Semgrep rules. Use when porting a Semgrep rule to specified target languages. Takes an existing rule and target languages as input, produces independent rule+test directories for each language."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/semgrep-rule-variant-creator/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:sharp-edges"
+    name: "sharp-edges"
+    slug: "sharp-edges"
+    description: "Identifies error-prone APIs, dangerous configurations, and footgun designs that enable security mistakes. Use when reviewing API designs, configuration schemas, cryptographic library ergonomics, or evaluating whether code follows 'secure by default' and 'pit of success' principles. Triggers: footgun, misuse-resistant, secure defaults, API usability, dangerous configuration."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/sharp-edges/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:spec-to-code-compliance"
+    name: "spec-to-code-compliance"
+    slug: "spec-to-code-compliance"
+    description: "Check code against the documentation that specifies it - which requirements hold, which the code contradicts, which are absent, and what the code does that no document mentions. Use when comparing an implementation against a whitepaper, protocol spec, or design document."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/spec-to-code-compliance/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:supply-chain-risk-auditor"
+    name: "supply-chain-risk-auditor"
+    slug: "supply-chain-risk-auditor"
+    description: "Audits a project's dependencies for supply-chain risk: version-matched advisories for direct dependencies and the full lockfile tree, abandoned or archived upstreams, npm publisher concentration, and install-time script execution. Use when asked to audit dependencies, assess supply-chain or third-party package risk, or review a dependency tree before an engagement."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/supply-chain-risk-auditor/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "general"
+  - id: "cursor-plugin:local:trailofbits-security:variant-analysis"
+    name: "variant-analysis"
+    slug: "variant-analysis"
+    description: "Hunts for the other instances of a bug already found — the variants of one root cause across a codebase. Use immediately after a vulnerability, logic bug, or bad pattern turns up in a specific file and the question becomes where else it occurs, including the bare conversational form (\"are there others like this?\", \"is this the same bug?\"). Also for generalizing one known instance into a CodeQL or…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/variant-analysis/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:vulnerability-triage-brocards"
+    name: "vulnerability-triage-brocards"
+    slug: "vulnerability-triage-brocards"
+    description: ">- This skill should be used when the user asks to \"triage a vulnerability report\", \"assess a CVE\", \"evaluate a bug bounty submission\", \"decide if a finding is valid\", \"review a security finding\", \"dismiss a vulnerability\", \"should we fix this CVE\", \"prioritize a vulnerability report\", or needs to determine whether an incoming vulnerability report warrants investigation. Applies 7 brocards (rules…"
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/vulnerability-triage-brocards/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
+  - id: "cursor-plugin:local:trailofbits-security:yara-rule-authoring"
+    name: "yara-rule-authoring"
+    slug: "yara-rule-authoring"
+    description: "> Guides authoring of high-quality YARA-X detection rules for malware identification. Use when writing, reviewing, or optimizing YARA rules. Covers naming conventions, string selection, performance optimization, migration from legacy YARA, and false positive reduction. Triggers on: YARA, YARA-X, malware detection, threat hunting, IOC, signature, crx module, dex module."
+    path: "~/.cursor/plugins/local/trailofbits-security/skills/yara-rule-authoring/SKILL.md"
+    runtime: "cursor-plugin"
+    marketplace: "local-plugin"
+    plugins: ["trailofbits-security"]
+    activation: "core"
+    k3_domain: "security"
 
 profiles:
   - id: "claude-profile:_mutex"

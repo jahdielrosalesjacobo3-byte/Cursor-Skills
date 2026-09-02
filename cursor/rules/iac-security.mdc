@@ -1,0 +1,15 @@
+---
+description: IaC / container security guardrails (Terraform, Kubernetes, Docker, CI workflows)
+globs: ["**/*.tf", "**/*.tfvars", "**/Dockerfile*", "**/docker-compose*.y*ml", "**/k8s/**/*.y*ml", "**/helm/**/*.y*ml", "**/.github/workflows/*.y*ml"]
+alwaysApply: false
+---
+
+# Infrastructure as Code
+
+- Least privilege: no `*` actions/resources, no `0.0.0.0/0` ingress on admin ports, no public buckets by default.
+- No plaintext secrets in `.tf`/`values.yaml`/workflows; use secret managers or `${env:}` / repo secrets.
+- Pin versions: provider/module versions, base images by digest, GitHub Actions by SHA.
+- Containers: non-root user, minimal base, `HEALTHCHECK`, no `latest`.
+- Scan before merge: `snyk_iac_scan` / `snyk_container_scan` (MCP), Trail of Bits `agentic-actions-auditor` for CI workflows, `supply-chain-risk-auditor` for deps.
+- AWS specifics → AWS Knowledge MCP (`search_documentation`) instead of guessing service limits/regions.
+- Skills: `10-cloud-security`, `19-grc-compliance` for control mapping.

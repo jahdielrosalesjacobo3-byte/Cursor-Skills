@@ -3,8 +3,8 @@
 # Composable modules: tools, system posture, context strategy, skills, memory, subagents.
 # Pick one profile per task via the cognitive router; do not lock forever to a single harness habit.
 
-version: 2
-updated: "2026-07-30"
+version: 3
+updated: "2026-09-02"
 
 defaults:
   shared_modules:
@@ -20,14 +20,33 @@ defaults:
   # marketplace skill the core registry does not cover; `none` keeps it on L1.
   catalog_access: l2_on_demand
   catalog_index: integrations/catalog.json
+  default_effort: low
+  default_profile_hint: composer-fast
 
 profiles:
+  composer-fast:
+    teacher_family: general
+    default_effort: low
+    tools: [read, write, grep, shell, search]
+    skills: []
+    memory: none
+    context_strategy: minimal
+    subagents: []
+    subagents_policy: never-unless-user-asks
+    catalog_access: none
+    grm_judge: skip
+    preserved_thinking: false
+    partial_rollout: false
+    topical_locks: false
+    notes: "Default latency — Composer Fast / simple turns; escalate when needed"
+
   full-spectrum:
     teacher_family: mixed
     default_effort: max
     tools: [shell, browser, mcp, read, write, grep, search, web]
-    skills: [k3-cognitive-router]
-    memory: orchestrator-state
+    mcp: [graphify, serena, context7, github, linear, claude-flow, Semgrep, Snyk, shadcn, aws-knowledge, Vercel, Supabase, Figma]
+    skills: [k3-cognitive-router, tool-discovery]
+    memory: orchestrator-state+claude-flow-agentdb
     context_strategy: attnres_selective
     subagents_policy: any-relevant-up-to-16
     cross_family: true
@@ -52,9 +71,10 @@ profiles:
   research-deep:
     teacher_family: general
     default_effort: max
-    tools: [search, web, read, write]
-    skills: [deep-researcher, researcher, dossier-investigator, memory-specialist]
-    memory: scratchpad+checkpoints
+    tools: [search, web, read, write, mcp]
+    mcp: [context7, aws-knowledge, graphify, claude-flow, github]
+    skills: [deep-researcher, researcher, dossier-investigator, memory-specialist, graphify, tool-discovery]
+    memory: scratchpad+checkpoints+claude-flow-agentdb
     context_strategy: attnres_selective
     subagents: [deep-researcher, dossier-investigator]
     catalog_access: l2_on_demand
@@ -65,8 +85,9 @@ profiles:
     teacher_family: agentic
     default_effort: high
     tools: [shell, browser, mcp, read, write]
+    mcp: [claude-flow, linear, github, graphify]
     skills: [k3-cognitive-router, goal-planner, workflow-specialist, browser-agent]
-    memory: orchestrator-state
+    memory: orchestrator-state+claude-flow-agentdb
     context_strategy: compact_at_300k_metaphor
     subagents: [coordinator, goal-planner, browser-agent]
     partial_rollout: true
@@ -78,7 +99,8 @@ profiles:
     teacher_family: coding
     default_effort: high
     tools: [shell, read, write, grep, mcp]
-    skills: [coder, tester, reviewer, git-specialist]
+    mcp: [graphify, serena, context7, github, Semgrep]
+    skills: [coder, tester, reviewer, git-specialist, graphify, tool-discovery, tob-property-based-testing]
     memory: scratchpad
     context_strategy: attnres_selective
     subagents: [coder, tester, reviewer]
@@ -92,7 +114,8 @@ profiles:
     teacher_family: coding
     default_effort: max
     tools: [shell, read, grep, mcp-semgrep]
-    skills: [security-auditor, safety-specialist, owasp-security, security-audit, review-security, 09-web-security]
+    mcp: [Semgrep, Snyk, graphify, serena, github]
+    skills: [security-auditor, safety-specialist, owasp-security, security-audit, review-security, 09-web-security, tob-static-analysis, tob-differential-review]
     memory: orchestrator-state
     context_strategy: attnres_selective
     subagents: [security-auditor, safety-specialist, reviewer]
@@ -100,13 +123,30 @@ profiles:
     snyk_code: disabled
     sast: semgrep
     catalog_access: l2_on_demand
-    preferred_marketplaces: [hackingtool-marketplace, ruflo, antigravity-awesome-skills]
+    preferred_marketplaces: [trailofbits-security, hackingtool-marketplace, ruflo, antigravity-awesome-skills]
     notes: "Audits/IR; Semgrep primary; no Snyk Code"
+
+  appsec-audit:
+    teacher_family: coding
+    default_effort: max
+    tools: [shell, read, grep, mcp]
+    mcp: [Semgrep, graphify, serena, github, Snyk]
+    skills: [tob-audit-context-building, tob-static-analysis, tob-variant-analysis, tob-fp-check, tob-differential-review, tob-supply-chain-risk-auditor, tob-vulnerability-triage, security-auditor]
+    memory: orchestrator-state
+    context_strategy: attnres_selective
+    subagents: [function-analyzer, data-flow-analyzer, exploitability-verifier, adversarial-modeler, security-auditor]
+    grm_judge: required
+    sast: semgrep
+    catalog_access: l2_on_demand
+    preferred_marketplaces: [trailofbits-security, hackingtool-marketplace]
+    workflow: "graphify god_nodes → audit-context-building → static-analysis (run all) → variant-analysis → fp-check → triage → report"
+    notes: "Full codebase audit / PR security review with Trail of Bits methodology"
 
   design-ui:
     teacher_family: agentic
     default_effort: high
     tools: [read, write, browser, mcp-figma]
+    mcp: [Figma, Mobbin, shadcn, context7]
     skills: [webkit-frontend-design, webkit-shadcn-ui, browser-agent]
     memory: scratchpad
     context_strategy: attnres_selective
@@ -119,7 +159,8 @@ profiles:
     teacher_family: coding
     default_effort: high
     tools: [shell, read, write, mcp]
-    skills: [deployment-expert, performance-optimizer, migration-engineer, observability-engineer]
+    mcp: [Vercel, Supabase, aws-knowledge, Snyk, github]
+    skills: [deployment-expert, performance-optimizer, migration-engineer, observability-engineer, iac-security]
     memory: scratchpad
     context_strategy: attnres_selective
     subagents: [deployment-expert, performance-optimizer]
@@ -129,17 +170,20 @@ profiles:
 
 # Domain → default profile
 domain_defaults:
-  general: general-light
+  general: composer-fast
   research: research-deep
   agentic: agentic-long
   design: design-ui
   coding: coding-default
   security: security-max
+  security_audit: appsec-audit
   infra: infra-deploy
   trading: coding-default
   "*": full-spectrum
 user_override:
   phrases: ["libertad total", "máximo provecho", "full-spectrum", "sin restricciones de dominio", "usa todo el stack"]
+  speed_phrases: ["rápido", "velocidad", "respuesta rápida", "composer fast", "sin rodeos", "optimiza velocidad"]
   force_profile: full-spectrum
+  speed_profile: composer-fast
   max_subagents: 16
   effort: max
