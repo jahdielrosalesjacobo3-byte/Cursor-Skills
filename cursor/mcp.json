@@ -2,16 +2,24 @@
   "mcpServers": {
     "Snyk": {
       "command": "/opt/homebrew/bin/snyk",
-      "args": ["mcp", "-t", "stdio"],
+      "args": [
+        "mcp",
+        "-t",
+        "stdio"
+      ],
       "env": {}
     },
     "Semgrep": {
       "command": "/opt/homebrew/bin/semgrep",
-      "args": ["mcp", "-t", "stdio"],
+      "args": [
+        "mcp",
+        "-t",
+        "stdio"
+      ],
       "env": {}
     },
     "graphify": {
-      "command": "${userHome}/.local/bin/graphify-mcp",
+      "command": "/Users/jahdielrosales/.local/bin/graphify-mcp",
       "args": [],
       "env": {
         "GRAPHIFY_MAX_CONTEXTS": "8",
@@ -19,14 +27,19 @@
       }
     },
     "serena": {
-      "command": "${userHome}/.local/bin/serena",
+      "command": "/Users/jahdielrosales/.local/bin/serena",
       "args": [
         "start-mcp-server",
-        "--context", "ide",
-        "--project", "${workspaceFolder}",
-        "--enable-web-dashboard", "false",
-        "--open-web-dashboard", "false",
-        "--log-level", "ERROR"
+        "--context",
+        "ide",
+        "--project",
+        "${workspaceFolder}",
+        "--enable-web-dashboard",
+        "false",
+        "--open-web-dashboard",
+        "false",
+        "--log-level",
+        "ERROR"
       ],
       "env": {}
     },
@@ -48,12 +61,19 @@
     },
     "shadcn": {
       "command": "npx",
-      "args": ["-y", "shadcn@latest", "mcp"],
+      "args": [
+        "-y",
+        "shadcn@latest",
+        "mcp"
+      ],
       "env": {}
     },
     "claude-flow": {
       "command": "/opt/homebrew/bin/claude-flow",
-      "args": ["mcp", "start"],
+      "args": [
+        "mcp",
+        "start"
+      ],
       "env": {
         "CLAUDE_FLOW_MCP_TRANSPORT": "stdio"
       }
