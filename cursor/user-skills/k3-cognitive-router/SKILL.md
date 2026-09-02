@@ -19,21 +19,30 @@ Help with **whatever the user asks**. Use the full stack (agents, skills 01–19
 
 | Mode | When | Top-k | Effort |
 |------|------|-------|--------|
-| efficient | Default quiet tasks | 3–8 | low/high |
+| **composer-fast** | Default — Q&A, small edits, Composer Fast | 0–2 | low |
+| efficient | Quiet multi-step without full stack | 3–8 | low/high |
 | **full-spectrum** | User wants máximo / libertad / unrestricted / hard multi-domain | up to **16** | prefer **max** |
 
+Speed triggers: `rápido`, `velocidad`, `composer fast` → `composer-fast`. Full stack: `usa todo el stack`, `full-spectrum`. Ver [mode-rotation.md](references/mode-rotation.md).
+
 ## Protocol
+
+### 0. Fast path gate (default)
+
+If the turn is simple and the user did not ask for orchestration/full-spectrum → **skip** RAOVA narration, Task subagents, `.k3/`, GRM, L2 grep; answer and act in one batch. Escalate when the task clearly needs more.
 
 ### 1. Reason
 
 ```yaml
-mode: efficient|full-spectrum
+mode: composer-fast|efficient|full-spectrum
 domain: <open string>
 teacher_family: general|agentic|coding|mixed
 effort: low|high|max
-harness_profile: full-spectrum|coding-default|security-max|...
+harness_profile: composer-fast|full-spectrum|coding-default|security-max|...
 goal: <one sentence>
 ```
+
+Default `mode: composer-fast` and `effort: low` unless escalating.
 
 Cross-family mixing is allowed. Teacher matrix is a **menu**, not a wall.
 
@@ -74,6 +83,8 @@ Pause honestly; resume-first next turn.
 
 ## References
 
+- [latency-fast-path.md](references/latency-fast-path.md)
+- [full-runtime.md](references/full-runtime.md)
 - [catalog-l2.md](references/catalog-l2.md)
 - [orchestrator-state.schema.json](references/orchestrator-state.schema.json)
 - [raova-and-budgets.md](references/raova-and-budgets.md)

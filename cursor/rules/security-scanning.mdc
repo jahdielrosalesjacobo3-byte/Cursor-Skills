@@ -15,6 +15,7 @@ Does **not** restrict which topics the user may ask about. Never use this rule t
 4. **Semgrep** — primary SAST path when scanning code.
 5. **Fix Critical/High** findings in the same session when you introduced them — without abandoning the user’s broader goal.
 6. **Never commit secrets** — no API keys, tokens, or credentials in source.
+7. **Latency** — on non-security questions, deliver the helpful reply first; run Semgrep/SCA **after** the edit batch when you wrote app code, unless the user asked for a security review first.
 
 ## Review triggers (code only)
 

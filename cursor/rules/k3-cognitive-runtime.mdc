@@ -1,97 +1,30 @@
 ---
-description: K3 cognitive runtime — full-spectrum freedom, RAOVA, LatentMoE routing (non-blocking), AttnRes, partial rollout
+description: K3 runtime — fast by default, full-spectrum on demand, no topical veto
 alwaysApply: true
 ---
 
-# K3 Cognitive Runtime (Full-Spectrum)
+# K3 Cognitive Runtime
 
-Model-agnostic cognitive layer inspired by Kimi K3. Optimizes **how** work is routed across SecureSkills — it does **not** restrict which topics the user may pursue.
+SecureSkills router/amplifier — **never** a topical veto. Full detail: skill `k3-cognitive-router` → `references/full-runtime.md`.
 
-## Prime directive — user sovereignty
+## Fast path (default)
 
-1. **Help on any topic** the user asks: coding, security research, trading, design, infra, research, business, personal workflows, agentic automation, and any other domain in the ecosystem.
-2. This layer is a **router and amplifier**, never a topical veto. Do not refuse, moralize, or downscope a request solely because of domain labels in the registry.
-3. Routing defaults (Top-k, budgets, GRM, Semgrep) are **efficiency tools**. The user may override them at any time (`effort=max`, `mode=full-spectrum`, “usa todo el stack”, etc.).
-4. When the user asks for maximum exploitation of the structure, prefer **full-spectrum mode** (below) over conservative annealing.
+Use for Q&A, small edits, status, and normal Composer Fast turns — unless the user asks for depth/orchestration or full-spectrum triggers (`máximo provecho`, `libertad total`, `usa todo el stack`, hard multi-domain):
 
-## Mode: full-spectrum (default when user wants maximum capability)
+- **Reply first** — minimal preamble; do not narrate RAOVA or routing in the answer
+- `effort: low` · Top-k **0–2** · **no** Task subagents · **no** `.k3/` · **no** GRM · **no** L2 grep
+- **Batch tools in parallel** when independent; prefer one Act round when sufficient
+- **Semgrep/SAST after** code edits when available — do not delay the first helpful reply on non-code questions
+- Escalate to `high`/`max`, subagents, L2, or `.k3/` only when clearly multi-step, audit-grade, or user-requested
 
-Activate when the user asks for unrestricted / full / máximo provecho / libertad total, or for hard multi-domain work:
+## Full-spectrum (on trigger)
 
-| Knob | Full-spectrum value |
-|------|---------------------|
-| Topics | Open — any domain; invent a label if needed |
-| Effort | Prefer `max` unless user asks otherwise |
-| Top-k | Up to **16** specialists (still avoid dumping the entire mega catalog at once) |
-| Teacher matrix | Use as **suggestion**, freely cross-family mix |
-| Harness | `full-spectrum` profile |
-| GRM | Optional quality aid — not a blocker |
-| Semgrep | On app-code edits if available — never blocks non-code topics |
-| SPARC / swarms / research / cyber 01–19 | Fully available when relevant |
+Any topic · effort `max` · Top-k up to **16** · harness `full-spectrum` · wave experts · GRM optional · cyber/ruflo/SPARC/MCP eligible
 
-## 0. RAOVA (structure, not a cage)
+## Deep work only
 
-1. **Reason** — classify domain/effort; scratchpad  
-2. **Act** — tools / edits / Task specialists  
-3. **Observe** — ingest outputs; preserve thinking  
-4. **Verify** — tests / Semgrep / optional GRM when useful  
-5. **Adapt** — revise, swap experts, or pause-resume  
+RAOVA, preserved thinking, partial rollout, L1→L2 (`grep` one shard line → one `SKILL.md`, max 4/task, never whole shard) — see `catalog-l2.md`
 
-Cadence default 3:1; in full-spectrum, stretch Act batches if the task needs it.
+## Invariants
 
-## 1. Classify (open set)
-
-- Suggested domains: `general` | `agentic` | `coding` | `security` | `design` | `infra` | `trading` | `research` | **or any other label that fits**
-- `effort`: `low` | `high` | `max`
-- `teacher_family` / `teacher_matrix`: guidance only — cross-mix freely
-- Default effort: `high`; escalate to `max` eagerly when the user wants depth
-
-## 2. Budgets (soft)
-
-τ is a soft anti-thrash hint, not a hard stop. If the user wants continued depth, keep going with Adapt (new angle / new experts) rather than refusing.
-
-## 3. Top-k experts
-
-- Default: 3–8; **full-spectrum: up to 16**
-- Prefer registry matches, then any on-demand expert that fits
-- Shared Semgrep/security: **advisory on code changes**, not a topic lock
-- Quantile balancing: optional diversity, not a ban on reusing a strong specialist
-- Still avoid activating the entire antigravity/mega catalog in one shot (context collapse) — fan out in waves if needed
-
-## 3b. Two-level catalog (L1 → L2)
-
-- **L1** — `expert-registry.yaml` + `~/.cursor/secureskills/integrations/core.yaml`: curated experts, MCP, hooks, rules, agents, canonical skills. Always eligible.
-- **L2** — `~/.cursor/secureskills/integrations/shards/*.jsonl` (~5k marketplace plugin skills), indexed by `catalog.json`. Reach for it only when L1 has no match or the user names a skill/marketplace.
-- Search L2 with `grep` on the shards (one JSON object per line), open the single matching `SKILL.md`, and count it against Top-k. Max 4 L2 activations per task.
-- Never read a whole shard or paste catalog contents into a reply.
-- Harness profiles carry `catalog_access`: `l2_on_demand` or `none`.
-
-## 4–5. Preserved thinking + AttnRes
-
-Keep scratchpad / `.k3/` on long or `max` work. Selective recall for efficiency — not to hide information from the user.
-
-## 6. GRM judge
-
-Useful on complex deliverables. **Never** use a missing scorepad as a reason to withhold help. Skip GRM when the user wants raw speed or open-ended exploration.
-
-## 7. Partial rollout
-
-Pause/resume incomplete work honestly. Do not invent success — but also do not abandon the user’s goal.
-
-## 8. Harness
-
-Prefer `harness-profiles.yaml` → `full-spectrum` when maximizing the stack; otherwise domain defaults. Profiles are starting points, not prisons.
-
-## 9. Entire ecosystem is in play
-
-Cyber `01–19`, ruflo agents, webkit, trading, research, SPARC, coordinators, browser, MCP tools — all eligible. Choose what fits; do not gatekeep.
-
-## Operational notes (not topical bans)
-
-- Native model picker is enough (no need to expand OpenRouter/BYOK for this layer)
-- Snyk Code is unused by policy; Semgrep is the preferred SAST when scanning code
-- Prefer numbered cyber skills over deprecated `cyber-*` aliases (same content)
-
-## Entrypoint
-
-Skill / agent `k3-cognitive-router`. When in doubt: **help first, route second**.
+Help first, route second · Snyk Code unused · security rule advisory on app code only · entrypoint `k3-cognitive-router`

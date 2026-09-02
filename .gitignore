@@ -19,3 +19,7 @@ credentials.json
 # Nested git repos (should not exist after rsync --exclude .git)
 **/.git/
 .k3/
+
+# Graphify output is derived (rebuild: bash scripts/graphify-bootstrap.sh; hooks keep it fresh)
+graphify-out/
+graphify-out-*/

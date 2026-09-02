@@ -13,8 +13,8 @@ Paper trains 3 domains × {low, high, max}. We expose the same surface via `teac
 
 | Effort | τ | When |
 |--------|---|------|
-| low | 0.5 | Q&A, tiny edits |
-| high | 1.0 | Default multi-step |
+| low | 0.5 | **Default** — Q&A, tiny edits, composer-fast |
+| high | 1.0 | Multi-step features |
 | max | 1.5–2.0 | Audits, deep research, long agentic — then anneal down if thrashing |
 
 ## AttnRes keys (examples)
@@ -30,3 +30,5 @@ Paper trains 3 domains × {low, high, max}. We expose the same surface via `teac
 5. Ignoring `paused_rollouts` next turn  
 6. Preferring `cyber-*` over `01–19`  
 7. Requiring Snyk Code  
+8. Narrating RAOVA/routing on composer-fast turns  
+9. Task subagents for a one-line answer  

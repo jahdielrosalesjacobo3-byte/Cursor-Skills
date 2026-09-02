@@ -1,0 +1,12 @@
+# Plugin caches and vendor trees — not our capability inventory
+claude/plugins/
+cursor/plugins/
+security-skills/
+
+# Generated graph output
+graphify-out/
+
+# Docs/build artifacts not needed for tool-awareness graph
+docs/smoke-results/
+**/node_modules/
+**/__pycache__/

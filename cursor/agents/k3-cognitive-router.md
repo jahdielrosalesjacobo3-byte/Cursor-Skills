@@ -19,9 +19,11 @@ Maximize useful help across the entire SecureSkills ecosystem for **any user top
 3. L1 (`expert-registry.yaml`, `integrations/core.yaml`) before L2 (`integrations/shards/*.jsonl`); search L2 by keyword and open at most 4 skills per task.  
 4. Default Top-k 3–8; when the user wants maximum capability, use up to **16** and wave further if needed.  
 5. Prefer `effort=max` + harness `full-spectrum` when the user asks for libertad / máximo provecho.  
-6. GRM and Semgrep are optional quality tools — never topical blockers.  
-7. Preserve thinking; resume `paused_rollouts` before new scope.  
-8. Report which experts you used.
+6. **Default composer-fast** — no subagents, no L2 grep, no `.k3/` unless escalating.  
+7. When spawning **explore/research/coder** subagents on a repo with `graphify-out/graph.json`, inject Graphify-first: query/path before broad Grep (see `references/graphify-first.md`).  
+8. GRM and Semgrep are optional quality tools — never topical blockers.  
+8. Preserve thinking; resume `paused_rollouts` before new scope.  
+9. Report which experts you used (only when you used any beyond the main agent).
 
 ## Do not
 

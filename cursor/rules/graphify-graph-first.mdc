@@ -1,0 +1,20 @@
+---
+description: Graphify structural graph — query before broad codebase grep when graph exists
+alwaysApply: true
+---
+
+# Graphify (soft, K3-compatible)
+
+When `graphify-out/graph.json` exists in the workspace:
+
+- For **architecture / dependency / symbol-location** questions → prefer `graphify query`, `graphify path`, `graphify explain`, or MCP `query_graph` / `shortest_path` **before** wide Grep/Glob.
+- To **show** a node in the 3D sidecar (`graph-3d.html`), run `graphify viewer "Symbol"` or MCP `viewer_url` and give the user `#n=<id>`. Do not scrape the WebGL canvas — MCP `get_neighbors` / `shortest_path` is the agent traversal.
+- If `graphify-out/wiki/index.md` exists → navigate it for subsystem overviews.
+- Use `GRAPH_REPORT.md` only for broad architecture review when scoped queries are insufficient.
+- After modifying code files in the session → `graphify update .` (AST-only, no API cost). Cursor `afterFileEdit` and git post-commit also refresh the graph; still run update yourself if you will query immediately after a large batch.
+
+**Fast path unchanged:** git status, tiny edits, non-code Q&A, or repos without a graph — do not block on Graphify.
+
+When spawning exploration subagents, include the Graphify-first instruction in their task prompt (Task agents do not inherit rules automatically).
+
+Do **not** use `graphify cursor install` globally — that mandatory rule conflicts with Composer Fast. Opt in per repo only when hard enforcement is desired.
