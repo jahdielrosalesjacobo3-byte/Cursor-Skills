@@ -2,7 +2,7 @@
 # Source of truth: scripts/build-integrations-catalog.sh
 # Do not hand-edit; regenerate after changing MCP/hooks/rules/agents/skills.
 version: 1
-generated_at: "2026-09-02T17:06:50Z"
+generated_at: "2026-10-29T23:11:30Z"
 
 mcp:
   - id: "mcp:semgrep"
@@ -69,7 +69,7 @@ mcp:
     name: "graphify"
     runtime: "mcp"
     transport: "stdio"
-    command: "${userHome}/.local/bin/graphify-mcp"
+    command: "/Users/jahdielrosales/.local/bin/graphify-mcp"
     url: ""
     args: []
     command_exists: true
@@ -85,11 +85,21 @@ mcp:
     command_exists: true
     auth: "remote-oauth-or-none"
     activation: "core"
+  - id: "mcp:rea"
+    name: "rea"
+    runtime: "mcp"
+    transport: "stdio"
+    command: "npx"
+    url: ""
+    args: ["-y", "rea-agents@4.1.0", "mcp"]
+    command_exists: true
+    auth: "none"
+    activation: "core"
   - id: "mcp:serena"
     name: "serena"
     runtime: "mcp"
     transport: "stdio"
-    command: "${userHome}/.local/bin/serena"
+    command: "/Users/jahdielrosales/.local/bin/serena"
     url: ""
     args: ["start-mcp-server", "--context", "ide", "--project", "${workspaceFolder}", "--enable-web-dashboard", "false", "--open-web-dashboard", "false", "--log-level", "ERROR"]
     command_exists: true
@@ -942,26 +952,6 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "agentic"
-  - id: "cursor-skill:deploy-with-vercel"
-    name: "deploy-with-vercel"
-    slug: "deploy-with-vercel"
-    description: ">- Link this repository to a Vercel project and deploy it using the Vercel MCP tools."
-    path: "~/.cursor/skills-cursor/deploy-with-vercel/SKILL.md"
-    runtime: "cursor-skill"
-    marketplace: "local"
-    activation: "core"
-    symlink: false
-    k3_domain: "infra"
-  - id: "cursor-skill:env-setup"
-    name: "env-setup"
-    slug: "env-setup"
-    description: "Explain, inspect, configure, and troubleshoot Cloud Agent development environments. Use when the user asks about environment setup, changing/improving the environment, or triggering/testing a build."
-    path: "~/.cursor/skills-cursor/env-setup/SKILL.md"
-    runtime: "cursor-skill"
-    marketplace: "local"
-    activation: "core"
-    symlink: false
-    k3_domain: "agentic"
   - id: "cursor-skill:goal"
     name: "goal"
     slug: "goal"
@@ -977,16 +967,6 @@ skills_cursor_managed:
     slug: "loop"
     description: ">- Run a prompt or skill in this session on a recurring or variable interval (e.g. /loop 5m /foo)."
     path: "~/.cursor/skills-cursor/loop/SKILL.md"
-    runtime: "cursor-skill"
-    marketplace: "local"
-    activation: "core"
-    symlink: false
-    k3_domain: "agentic"
-  - id: "cursor-skill:migrate-to-builds"
-    name: "migrate-to-builds"
-    slug: "migrate-to-builds"
-    description: "Test that a Cloud Agent environment will work with prebuilt environment builds and recommend any required changes. Use when the user wants to migrate to builds, test build compatibility, or follow the Builds page setup-agent flow."
-    path: "~/.cursor/skills-cursor/migrate-to-builds/SKILL.md"
     runtime: "cursor-skill"
     marketplace: "local"
     activation: "core"
@@ -1122,16 +1102,6 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "agentic"
-  - id: "cursor-skill:subscribe"
-    name: "subscribe"
-    slug: "subscribe"
-    description: "Wait for external events (GitHub CI results, PR activity, Slack messages, Linear issues) by subscribing with the cursor-subscriptions MCP tools instead of polling."
-    path: "~/.cursor/skills-cursor/subscribe/SKILL.md"
-    runtime: "cursor-skill"
-    marketplace: "local"
-    activation: "core"
-    symlink: false
-    k3_domain: "agentic"
   - id: "cursor-skill:update-cli-config"
     name: "update-cli-config"
     slug: "update-cli-config"
@@ -1152,16 +1122,16 @@ skills_cursor_managed:
     activation: "core"
     symlink: false
     k3_domain: "general"
-  - id: "cursor-skill:walkthrough-artifacts"
-    name: "walkthrough-artifacts"
-    slug: "walkthrough-artifacts"
-    description: "Create walkthrough artifacts (screenshots and screen recordings) that prove code changes work. Use when finishing tested changes and uploading demo evidence for the user."
-    path: "~/.cursor/skills-cursor/walkthrough-artifacts/SKILL.md"
+  - id: "cursor-skill:visualize"
+    name: "visualize"
+    slug: "visualize"
+    description: ">- Use /visualize for creating compact charts, diagrams, or other visuals inline as part of the conversation itself. It chooses among Markdown tables, Mermaid, inline HTML, and other supported in-transcript forms. Use Canvas for durable artifacts outside the transcript that users may revisit, refine, or share. You MUST read this skill whenever you create, edit, update, or show the user an in-conv…"
+    path: "~/.cursor/skills-cursor/visualize/SKILL.md"
     runtime: "cursor-skill"
     marketplace: "local"
     activation: "core"
     symlink: false
-    k3_domain: "coding"
+    k3_domain: "general"
 
 skills_claude:
   - id: "claude-skill:01-recon-osint"

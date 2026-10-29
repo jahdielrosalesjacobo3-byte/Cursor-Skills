@@ -1,6 +1,6 @@
 # Integrations catalog
 
-Generated `2026-09-02T17:06:50Z` by `scripts/build-integrations-catalog.sh`.
+Generated `2026-10-29T23:11:30Z` by `scripts/build-integrations-catalog.sh`.
 Regenerate after installing/removing plugins; verify with `scripts/verify-integrations.sh`.
 
 ## Two-level routing
@@ -18,15 +18,15 @@ The K3 cognitive router never loads this catalog wholesale.
 
 | Layer | Count |
 |-------|-------|
-| MCP servers | 10 |
+| MCP servers | 11 |
 | Hooks | 6 |
 | Always-apply rules | 9 |
 | Task agents | 49 |
 | Cursor user skills | 22 |
-| Cursor managed skills | 29 |
+| Cursor managed skills | 25 |
 | Claude skills | 40 |
 | Local plugin skills (L1-adjacent) | 23 |
-| L2 plugin skills | 5167 |
+| L2 plugin skills | 5229 |
 
 ## Shards
 
@@ -38,7 +38,7 @@ The K3 cognitive router never loads this catalog wholesale.
 | `shards/cursor-antigravity-awesome-skills.jsonl` | cursor | antigravity-awesome-skills | 1437 |
 | `shards/cursor-claude-code-skills.jsonl` | cursor | claude-code-skills | 11 |
 | `shards/cursor-claude-plugins-official.jsonl` | cursor | claude-plugins-official | 1 |
-| `shards/cursor-cursor-public.jsonl` | cursor | cursor-public | 221 |
+| `shards/cursor-cursor-public.jsonl` | cursor | cursor-public | 283 |
 | `shards/cursor-hackingtool-marketplace.jsonl` | cursor | hackingtool-marketplace | 1 |
 | `shards/cursor-karpathy-skills.jsonl` | cursor | karpathy-skills | 1 |
 | `shards/cursor-ruflo.jsonl` | cursor | ruflo | 13 |
@@ -53,14 +53,14 @@ The K3 cognitive router never loads this catalog wholesale.
 
 | Domain | Skills |
 |--------|--------|
-| general | 1142 |
-| agentic | 910 |
-| coding | 901 |
-| infra | 818 |
-| design | 607 |
-| security | 586 |
-| research | 124 |
-| trading | 79 |
+| general | 1155 |
+| agentic | 925 |
+| coding | 913 |
+| infra | 826 |
+| design | 614 |
+| security | 590 |
+| research | 126 |
+| trading | 80 |
 
 ## Querying a shard
 

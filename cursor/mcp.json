@@ -77,6 +77,15 @@
       "env": {
         "CLAUDE_FLOW_MCP_TRANSPORT": "stdio"
       }
+    },
+    "rea": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "rea-agents@4.1.0",
+        "mcp"
+      ],
+      "env": {}
     }
   }
 }

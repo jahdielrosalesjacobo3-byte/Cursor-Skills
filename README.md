@@ -8,6 +8,7 @@ Compatible con **Cursor Agent**, **Claude Code** y **Codex**.
 
 | Doc | Purpose |
 |-----|---------|
+| [`docs/GUIA-PARA-AGENTES.md`](docs/GUIA-PARA-AGENTES.md) | **Onboarding para agentes** (instalación, K3, L1/L2, MCP, perfiles) |
 | [`AGENTS.md`](AGENTS.md) | Contrato cognitivo (full-spectrum) |
 | [`expert-registry.yaml`](expert-registry.yaml) | Catálogo + `teacher_matrix` 3×3 |
 | [`harness-profiles.yaml`](harness-profiles.yaml) | Kits white-box incl. `full-spectrum` |
@@ -34,6 +35,8 @@ Inventario (ver también [`plugins-manifest.json`](plugins-manifest.json)):
 ## Instalación rápida (equipo)
 
 ```bash
+# Espejo personal (mismo contenido):
+# git clone https://github.com/jahdielrosalesjacobo3-byte/Cursor-Skills.git
 git clone https://github.com/SecureCorp-Mexico/SecureSkills.git
 cd SecureSkills
 bash scripts/install-to-local.sh

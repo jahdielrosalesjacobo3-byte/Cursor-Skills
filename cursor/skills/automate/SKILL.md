@@ -47,7 +47,7 @@ Use these checks to keep the draft complete before opening the editor. Do not sh
 | Scope | Before opening editor unless deferred |
 |-------|---------------------------------------|
 | **PCD:slack-trigger** | Slack channel ids are resolved, or user chose to pick channels in the Automations UI. Empty channels are valid only for explicit UI deferral. |
-| **PCD:slack-actions** | `slack.channel` / readSlack scope is resolved, or user chose **Select channels** in the editor. IDs must be `C…` / `G…` / `D…`, never `U…`. |
+| **PCD:slack-actions** | `slack.channel` / readSlack scope is resolved, or user chose **Select channels** in the editor. IDs must be `C…` / `G…`, never `U…`. A `D…` id is valid only in the `slack` action and always resolves to a DM with the automation owner. |
 | **PCD:git-scope** | PR triggers have repos/orgs; push triggers have repo + branch; CI triggers have repo scope. Use scoped repo discovery only after the user identifies the target. |
 
 ### PCD notes
@@ -249,7 +249,7 @@ Guardrails: do not run broad private repo inventory or unscoped account/org swee
 
 Slack MCP discovery before channel question, every time `slackTrigger` / `slack` / `readSlack` is involved. **Specify now** means the agent runs discovery first — not "ask the user for IDs". 1 channel → inline confirm; 2 → inline either/or; 3+ → `AskQuestion` over returned channels (+ **Pick in Automations UI**). **Do not prefill with empty channels after Specify now without discovery or continue-without.** If discovery is blocked → **Retry after setup** / **Continue without MCP** / **Pick in Automations UI** inline.
 
-Slack `channel` accepts `C…` / `G…` / `D…` IDs only — never `U…` member IDs. For Slack replies, offer **respond in the triggering thread** separately from **send to a specific channel or DM**. Empty `{}` actions are valid when the user picks **Select channels** in the editor; record the deferral in the draft table.
+Slack `channel` accepts `C…` / `G…` channel IDs — never `U…` member IDs. In the `slack` **action**, a `D…` id is also accepted and always resolves to a DM with the automation owner (DMing other users is not supported); `D…` ids are rejected in triggers. For Slack replies, offer **respond in the triggering thread** separately from **send to a specific channel or DM**. Empty `{}` actions are valid when the user picks **Select channels** in the editor; record the deferral in the draft table.
 
 #### PagerDuty / Linear / Sentry
 
@@ -257,7 +257,7 @@ PagerDuty MCP list services before `serviceIds` scope: 1/2 inline; 3+ → `AskQu
 
 ### YAML output shape (agent-internal)
 
-Wire format matches the reviewed Automations draft passed to `open_automation` as `prefillWorkflowData` — canonical proto JSON with full enum names (e.g. `GIT_PULL_REQUEST_ACTION_OPENED`). PR scope lives on `git.pullRequest` (`repos` / `orgs`); `workflow.gitConfig` holds `repo` + `branch` for non-`git` triggers that need a checkout. Use `ignoreDraftPrs`, not `ignoreDraftPr`. Slack channel / DM IDs: `C…` / `G…` / `D…`.
+Wire format matches the reviewed Automations draft passed to `open_automation` as `prefillWorkflowData` — canonical proto JSON with full enum names (e.g. `GIT_PULL_REQUEST_ACTION_OPENED`). PR scope lives on `git.pullRequest` (`repos` / `orgs`); `workflow.gitConfig` holds `repo` + `branch` for non-`git` triggers that need a checkout. Use `ignoreDraftPrs`, not `ignoreDraftPr`. Slack channel IDs: `C…` / `G…`; a `D…` id (`slack` action only) resolves to the automation owner's DM.
 
 Skeleton:
 
@@ -276,7 +276,7 @@ workflow:
 
 Prompts use `|` block scalar (`>-` folding breaks bullets). Empty `{}` actions are valid when the field is UI-only. `mcp.server.name` is required when `mcp` is enabled, and the name must be the `serverName` field from the matched entry's `SERVER_METADATA.json` — not the folder / `serverIdentifier`. See the MCP existence gate for the eligibility filter and the no-prefix-invention rule.
 
-**Trigger oneof keys are exhaustive.** Every entry in `workflow.triggers` must use exactly one of these top-level proto keys: `cron`, `git`, `slackTrigger`, `slackReactionAdded`, `slackChannelCreated`, `microsoftTeamsTrigger`, `microsoftTeamsChannelCreated`, `linear`, `webhook`, `pagerduty`, `sentry`. Never invent or paraphrase (`slackReaction`, `slack_reaction`, `slack`, `reactionAdded`, etc.) — the editor decodes triggers with `ignoreUnknownFields: true`, silently drops unknown keys, and renders the result as an unconfigurable "Configure trigger" card that blocks save. Empty `{}` trigger entries hit the same failure mode; never prefill a trigger you cannot fully name.
+**Trigger oneof keys are exhaustive.** Every entry in `workflow.triggers` must use exactly one of these top-level proto keys: `cron`, `git`, `slackTrigger`, `slackReactionAdded`, `slackChannelCreated`, `emailReceived`, `microsoftTeamsTrigger`, `microsoftTeamsChannelCreated`, `linear`, `webhook`, `pagerduty`, `sentry`. Never invent or paraphrase (`slackReaction`, `slack_reaction`, `slack`, `reactionAdded`, etc.) — the editor decodes triggers with `ignoreUnknownFields: true`, silently drops unknown keys, and renders the result as an unconfigurable "Configure trigger" card that blocks save. Empty `{}` trigger entries hit the same failure mode; never prefill a trigger you cannot fully name.
 
 ### Validation check (agent-internal)
 
@@ -335,6 +335,8 @@ These labels are agent-only — never show ids to users. If a future structured 
 | Channel created | `slack_channel_created` | `slackChannelCreated` |
 
 **`slackReactionAdded` payload** — `{ channels: ["C…"], emojiName: "<name>" }`. `emojiName` is the Slack short name **without** surrounding colons (e.g. `thumbsup`, not `:thumbsup:`); the server normalizes Unicode emoji to the matching alias on save. Completion reactions are not supported on `slackReactionAdded` triggers (would recurse) and are silently dropped.
+
+**`emailReceived` payload** (Grok Bot only) — `{ inboxEmail: "<one of the user's Grok Bot inbox addresses>", fromAddresses?: ["a@b.com", "*@vendor.com"], requireAuthPass: true }`. Fires when mail arrives at that inbox; an `inboxEmail` of `name+tag@` fires only for mail sent to that tag of the `name@` inbox. `fromAddresses` is an optional sender allowlist (empty = any sender): each entry is an exact lowercased address or `*@domain` (any mailbox at that domain). A `*` anywhere else is literal, not a glob. `requireAuthPass` (default true) skips mail that failed SPF/DKIM/DMARC. Mail matching no routine wakes nobody. The run gets the envelope only (sender, subject, ids) and reads the body with `ReadEmailThread`.
 
 **Completion reaction on a Slack message trigger.** "React with `:foo:` when the agent finishes" is a completion-reaction option on `slackTrigger`, not a separate trigger. Put `slackCompletionReactionMode: SLACK_COMPLETION_REACTION_MODE_CUSTOM` and `slackCompletionReactionCustomEmoji: ":foo:"` (with surrounding colons) on the same `slackTrigger` entry. Do not create a `slackReactionAdded` trigger to express completion behavior.
 

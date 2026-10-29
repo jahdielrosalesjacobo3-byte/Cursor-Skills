@@ -7,7 +7,7 @@ alwaysApply: true
 
 When a task may need **MCP, plugins, subagents, or marketplace skills** — discover first, do not ask the user to name tools you already have.
 
-1. **MCP (live)** — `GetDynamicTools` catalog or pattern search (`graphify`, `serena`, `context7`, `semgrep`, `snyk`, `github`, `linear`, `claude-flow`, `shadcn`, `aws`, `vercel`, `supabase`, `figma`, …). Inspect schema before `CallDynamicTool`. Intent → namespace: `expert-registry.yaml#mcp_routing`.
+1. **MCP (live)** — `GetDynamicTools` catalog or pattern search (`graphify`, `serena`, `context7`, `semgrep`, `snyk`, `github`, `linear`, `claude-flow`, `shadcn`, `rea`, `aws`, `vercel`, `supabase`, `figma`, …). Inspect schema before `CallDynamicTool`. Intent → namespace: `expert-registry.yaml#mcp_routing`.
 2. **L1** — `~/.cursor/secureskills/integrations/core.yaml` + `expert-registry.yaml` (MCPs, 49 agents, core skills, triggers).
 3. **Graph** — if `graphify-out/graph.json` exists: `graphify query "mcp integrations agents"` or MCP `query_graph`.
 4. **L2** — only when L1 has no match: grep one line in `integrations/shards/*.jsonl`, read one `SKILL.md` (max 4/task).

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "supermemory": {
+      "command": "node",
+      "args": ["${workspaceFolder}/dist/cli.js", "mcp"]
+    }
+  }
+}

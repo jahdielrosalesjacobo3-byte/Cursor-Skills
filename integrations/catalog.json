@@ -1,29 +1,29 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-02T17:06:50Z",
+  "generatedAt": "2026-10-29T23:11:30Z",
   "core": "core.yaml",
   "counts": {
-    "mcp": 10,
+    "mcp": 11,
     "hooks": 6,
     "rules": 9,
     "agents": 49,
     "skillsCursorUser": 22,
-    "skillsCursorManaged": 29,
+    "skillsCursorManaged": 25,
     "skillsClaude": 40,
-    "pluginSkillsCursor": 3605,
+    "pluginSkillsCursor": 3667,
     "pluginSkillsClaude": 1562,
     "pluginSkillsLocal": 23,
-    "l2Total": 5167
+    "l2Total": 5229
   },
   "domains": {
-    "general": 1142,
-    "agentic": 910,
-    "coding": 901,
-    "infra": 818,
-    "design": 607,
-    "security": 586,
-    "research": 124,
-    "trading": 79
+    "general": 1155,
+    "agentic": 925,
+    "coding": 913,
+    "infra": 826,
+    "design": 614,
+    "security": 590,
+    "research": 126,
+    "trading": 80
   },
   "shards": [
     {
@@ -66,7 +66,7 @@
       "file": "shards/cursor-cursor-public.jsonl",
       "runtime": "cursor",
       "marketplace": "cursor-public",
-      "count": 221
+      "count": 283
     },
     {
       "file": "shards/cursor-hackingtool-marketplace.jsonl",
